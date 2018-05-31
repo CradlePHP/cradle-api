@@ -1,0 +1,15 @@
+<div class="card mt-5">
+    <div class="card-header">
+        Invalid Request
+    </div>
+
+    <div class="card-body" >
+        The application interacting with us has sent us an invalid request.
+        Please notify the application of this error.
+        
+        {{#if message}}
+            <br /><br />
+            <code>{{message}}</code>
+        {{/if}}
+    </div>
+</div>

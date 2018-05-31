@@ -1,0 +1,275 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/admin">
+                <i class="fas fa-home"></i> {{_ 'Admin'}}
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="/admin/app/search">
+                <i class="fas fa-rocket"></i> {{_ 'Applications'}}
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            {{#when action '===' 'create'}}
+                <i class="fas fa-plus"></i> {{title}}
+            {{else}}
+                <i class="fas fa-edit"></i> {{title}}
+            {{/when}}
+        </li>
+    </ol>
+</nav>
+
+<div class="main-padding">
+    <h3 class="main-title"><i class="fa fa-rocket"></i> {{title}}</h3>
+    <form enctype="multipart/form-data" method="post" data-do="permission-field">
+        <div class="form-group">
+            <label class="control-label">{{_ 'Name'}}</label>
+            <input
+                class="form-control {{#if errors.app_name}}is-invalid{{/if}}"
+                placeholder="My Application"
+                name="app_name"
+                value="{{item.app_name}}"
+                type="text">
+
+            {{#if errors.app_name}}
+            <div class="invalid-feedback">
+                {{errors.app_name}}
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">{{_ 'Slug'}}</label>
+            <input
+                class="form-control {{#if errors.app_slug}}is-invalid{{/if}}"
+                placeholder="app"
+                name="app_slug"
+                value="{{item.app_slug}}"
+                type="text"
+                data-do="slugger"
+                data-source="input[name=app_name]"
+                data-upper="0"
+                data-space="-"
+            >
+
+            {{#if errors.app_slug}}
+            <div class="invalid-feedback">
+                {{errors.app_slug}}
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">{{_ 'Description'}}</label>
+            <textarea
+                class="form-control {{#if errors.app_description}}is-invalid{{/if}}"
+                name="app_description"
+                placeholder="My Application Description"
+            >{{item.app_description}}</textarea>
+
+            {{#if errors.app_description}}
+            <div class="invalid-feedback">
+                {{errors.app_description}}
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">{{_ 'Domain'}}</label>
+            <input
+                class="form-control {{#if errors.app_domain}}is-invalid{{/if}}"
+                placeholder="*"
+                name="app_domain"
+                value="{{item.app_domain}}"
+                type="text">
+
+            {{#if errors.app_domain}}
+            <div class="invalid-feedback">
+                {{errors.app_domain}}
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">{{_ 'Website'}}</label>
+            <input
+                class="form-control {{#if errors.app_website}}is-invalid{{/if}}"
+                placeholder="https://myapp.com"
+                name="app_website"
+                value="{{item.app_website}}"
+                type="text">
+
+            {{#if errors.app_website}}
+            <div class="invalid-feedback">
+                {{errors.app_website}}
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-group">
+                <table
+                class="table table-striped file-field"
+                data-accept="image/png,image/jpg,image/jpeg,image/gif"
+                data-do="file-field"
+                data-name="app_icon"
+            >
+                <thead>
+                    <tr>
+                        <th>Preview</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#scope item 'app_icon'}}
+                        <tr class="file-field-none" style="display:none;">
+                            <td colspan="5">
+                                <div class="alert alert-info">No File Selected</div>
+                            </td>
+                        </tr>
+                        <tr class="file-field-item" data-index="{INDEX}">
+                            <td class="file-field-preview">
+                                {{#fileinfo this}}
+                                    {{#in 'jpg,jpeg,png,gif' extension}}
+                                        <div class="file-field-preview-container">
+                                            <img src="{{../this}}" height="50" />
+                                        </div>
+                                    {{else}}
+                                        <div class="file-field-preview-container">
+                                            <i class="fas fa-file text-info"></i>
+                                            <span class="file-field-extension">{{extension}}</span>
+                                        </div>
+                                    {{/in}}
+                                {{/fileinfo}}
+                            </td>
+                            <td class="file-field-name">
+                                {{this}}
+                                <input name="app_icon" type="hidden" value="{{this}}" />
+                            </td>
+                        </tr>
+                    {{else}}
+                        <tr class="file-field-none">
+                            <td colspan="5">
+                                <div class="alert alert-info">No Image Selected</div>
+                            </td>
+                        </tr>
+                    {{/scope}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            <button
+                                class="file-field-upload btn btn-info"
+                                type="button"
+                            >
+                                Choose Image
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">{{_ 'Permissions'}}</label>
+            
+            {{#if roles}}
+                {{#each roles}}
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input checkall" id="{{role_name}}">
+                                <label class="form-check-label font-weight-bold" for="{{role_name}}">{{role_name}}</label>
+                            </div>
+
+                            <ul class="list-group mt-3">
+                                {{#each role_permissions}}
+                                    <li class="list-group-item">
+                                        <div class="form-check d-flex w-100 justify-content-between">
+                                            <input 
+                                                type="checkbox" 
+                                                class="form-check-input" 
+                                                id="{{id}}"
+                                                name="app_permissions[{{../role_id}}][]"
+                                                value="{{id}}"
+
+                                                {{#scope ../../item.app_permissions ../role_id}}
+                                                    {{#in this ../id}}
+                                                        checked
+                                                    {{/in}}
+                                                {{/scope}}
+                                            >
+                                            <label class="form-check-label" for="{{id}}">
+                                                {{label}}&nbsp;
+                                                <span class="
+                                                    badge 
+                                                    {{#when method '===' 'get'}}
+                                                    badge-success 
+                                                    {{/when}}
+                                                    {{#when method '===' 'post'}}
+                                                    badge-primary
+                                                    {{/when}}
+                                                    {{#when method '===' 'put'}}
+                                                    badge-info
+                                                    {{/when}}
+                                                    {{#when method '===' 'delete'}}
+                                                    badge-danger
+                                                    {{/when}}
+                                                    {{#when method '===' 'all'}}
+                                                    badge-warning
+                                                    {{/when}}
+                                                    
+                                                    badge-pill
+                                                ">{{upper method}}</span>
+                                            </label>
+                                            <small>
+                                                {{path}}
+                                            </small>                                                                    
+                                        </div>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </li>
+                    </ul>
+                {{/each}}
+            {{else}}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        You don't have any access permissions.
+                    </li>
+                </ul>
+            {{/if}}
+        </div>
+
+        <div class="clear form-group">
+            <hr/>
+            <input type="hidden" name="csrf" value="" />
+            <button type="submit" class="btn btn-primary">{{_ 'Submit'}}</button>
+        </div>
+        <span class="help-text has-error"></span>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('.checkall').change(function (e) {
+            var target = $(this);
+            var siblings = target
+                .parent()
+                .parent()
+                .find('ul li input[type="checkbox"]');
+
+            if (target.is(':checked')) {
+                siblings.each(function (index, element) {
+                    $(element).attr('checked', 'true')
+                });
+
+                return;
+            }
+            
+            siblings.each(function (index, element) {
+                $(element).removeAttr('checked');
+            });
+        });
+    });
+</script>

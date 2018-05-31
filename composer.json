@@ -1,0 +1,30 @@
+{
+    "name": "cradlephp/cradle-api",
+    "description": "Cradle API Package",
+    "minimum-stability": "dev",
+    "type": "cradle-package",
+    "require": {
+        "cradlephp/cradle-system": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "7.0.2",
+        "squizlabs/php_codesniffer": "3.2.3",
+        "satooshi/php-coveralls": "2.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Charles Zamora",
+            "email": "charles.andacc@gmail.com"
+        },
+        {
+            "name": "April Sacil",
+            "email": "aprilvsacil@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cradle\\Package\\Api\\": "src/"
+        }
+    }
+}
