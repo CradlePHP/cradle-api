@@ -172,7 +172,7 @@
 
         <div class="form-group">
             <label class="control-label">{{_ 'Permissions'}}</label>
-            
+
             {{#if roles}}
                 {{#each roles}}
                     <ul class="list-group mb-3">
@@ -186,10 +186,10 @@
                                 {{#each role_permissions}}
                                     <li class="list-group-item">
                                         <div class="form-check d-flex w-100 justify-content-between">
-                                            <input 
-                                                type="checkbox" 
-                                                class="form-check-input" 
-                                                id="{{id}}"
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                                id="permission-{{id}}"
                                                 name="app_permissions[{{../role_id}}][]"
                                                 value="{{id}}"
 
@@ -199,12 +199,12 @@
                                                     {{/in}}
                                                 {{/scope}}
                                             >
-                                            <label class="form-check-label" for="{{id}}">
+                                            <label class="form-check-label" for="permission-{{id}}">
                                                 {{label}}&nbsp;
                                                 <span class="
-                                                    badge 
+                                                    badge
                                                     {{#when method '===' 'get'}}
-                                                    badge-success 
+                                                    badge-success
                                                     {{/when}}
                                                     {{#when method '===' 'post'}}
                                                     badge-primary
@@ -218,13 +218,29 @@
                                                     {{#when method '===' 'all'}}
                                                     badge-warning
                                                     {{/when}}
-                                                    
+
                                                     badge-pill
                                                 ">{{upper method}}</span>
                                             </label>
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                                id="webhook-{{id}}"
+                                                name="app_webhooks[{{../role_id}}][]"
+                                                value="{{id}}"
+
+                                                {{#scope ../../item.app_webhooks ../role_id}}
+                                                    {{#in this ../id}}
+                                                        checked
+                                                    {{/in}}
+                                                {{/scope}}
+                                            >
+                                            <label class="form-check-label" for="webhook{{id}}">
+                                                {{_ 'Enable Webhook'}}
+                                            </label>
                                             <small>
                                                 {{path}}
-                                            </small>                                                                    
+                                            </small>
                                         </div>
                                     </li>
                                 {{/each}}
@@ -266,7 +282,7 @@
 
                 return;
             }
-            
+
             siblings.each(function (index, element) {
                 $(element).removeAttr('checked');
             });

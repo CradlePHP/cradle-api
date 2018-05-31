@@ -1,3 +1,3 @@
-# cradle-rest
+# cradle-api
 
-Cradle REST Manager Package
+Cradle API Manager Package

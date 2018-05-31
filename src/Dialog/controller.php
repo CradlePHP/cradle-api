@@ -212,7 +212,7 @@ $this->get('/dialog/oauth', function ($request, $response) {
     // 3. Render Template
     $class = 'page-dialog-request';
     $title = $this->package('global')->translate('Authorize Application');
-    $body = cradle('cradlephp/cradle-rest')->template('Dialog', 'oauth', $data);
+    $body = cradle('cradlephp/cradle-api')->template('Dialog', 'oauth', $data);
 
     // set content
     $response
@@ -400,7 +400,7 @@ $this->get('/dialog/invalid', function ($request, $response) {
     // 3. Render Template
     $class = 'page-dialog-invalid';
     $title = $this->package('global')->translate('Invalid Request');
-    $body = cradle('cradlephp/cradle-rest')->template('Dialog', 'invalid', $data);
+    $body = cradle('cradlephp/cradle-api')->template('Dialog', 'invalid', $data);
 
     // set content
     $response

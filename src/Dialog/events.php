@@ -14,7 +14,7 @@
  * @param Request $response
  */
 $cradle->on('rest-render-dialog-page', function ($request, $response) {
-    $content = cradle('cradlephp/cradle-rest')->template('Dialog', '_page', [
+    $content = cradle('cradlephp/cradle-api')->template('Dialog', '_page', [
         'page' => $response->getPage(),
         'results' => $response->getResults(),
         'content' => $response->getContent()

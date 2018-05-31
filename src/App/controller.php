@@ -54,7 +54,7 @@ $this->get('/admin/app/create', function ($request, $response) {
     $data['action'] = 'create';
 
     $body = $this
-        ->package('cradlephp/cradle-rest')
+        ->package('cradlephp/cradle-api')
         ->template('App', 'form', $data);
 
     //Set Content
@@ -103,7 +103,7 @@ $this->get('/admin/app/detail/:app_id', function ($request, $response) {
     $data['title'] = $this->package('global')->translate('Application Detail');
 
     $body = $this
-        ->package('cradlephp/cradle-rest')
+        ->package('cradlephp/cradle-api')
         ->template('App', 'detail', $data);
 
     //Set Content
@@ -176,7 +176,7 @@ $this->get('/admin/app/update/:app_id', function ($request, $response) {
     $data['title'] = $this->package('global')->translate('Application Update');
 
     $body = $this
-        ->package('cradlephp/cradle-rest')
+        ->package('cradlephp/cradle-api')
         ->template('App', 'form', $data);
 
     //Set Content
@@ -354,7 +354,7 @@ $this->get('/admin/app/search', function ($request, $response) {
     $title = $this->package('global')->translate('Applications');
 
     $body = $this
-        ->package('cradlephp/cradle-rest')
+        ->package('cradlephp/cradle-api')
         ->template('App', 'search', $data);
 
     //Set Content

@@ -11,7 +11,7 @@ return function($request, $response) {
     /**
      * Add Template Builder
      */
-    $this->package('cradlephp/cradle-rest')->addMethod('template', function (
+    $this->package('cradlephp/cradle-api')->addMethod('template', function (
         $type,
         $file,
         array $data = [],
