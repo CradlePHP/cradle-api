@@ -22,15 +22,10 @@ use Cradle\Http\Response;
  * @param Response $response
  */
 $this->on('app-create', function ($request, $response) {
-    $data = [];
-    if ($request->getStage()) {
-        $data = $request->getStage();
-    }
-    
     //do a custom validation if there's a webhook
     //just few validations because we still have the
     //default validation of system model
-    $errors = Validator::getWebhookErrors($data);
+    $errors = Validator::getWebhookErrors($request->getStage());
 
     //if there are errors
     if (!empty($errors)) {
@@ -127,7 +122,7 @@ $this->on('app-update', function ($request, $response) {
     //do a custom validation if there's a webhook
     //just few validations because we still have the
     //default validation of system model
-    $errors = Validator::getWebhookErrors($data);
+    $errors = Validator::getWebhookErrors($request->getStage());
 
     //if there are errors
     if (!empty($errors)) {

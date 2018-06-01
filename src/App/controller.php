@@ -482,3 +482,117 @@ $this->post('/admin/app/update/:app_id', function ($request, $response) {
     //redirect
     $this->package('global')->redirect('/admin/app/search');
 });
+
+
+// Catch default routing
+/**
+ *  Default route for model create
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/system/model/app/create', function ($request, $response) {
+    //now let the object create take over
+    $this->routeTo(
+        'get',
+        '/admin/app/create',
+        $request,
+        $response
+    );
+});
+
+/**
+ *  Default route for model search
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/system/model/app/search', function ($request, $response) {
+    //now let the object search take over
+    $this->routeTo(
+        'get',
+        '/admin/app/search',
+        $request,
+        $response
+    );
+});
+
+/**
+ *  Default route for model update
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/system/model/app/update/:app_id', function ($request, $response) {
+    //now let the object update take over
+    $this->routeTo(
+        'get',
+        '/admin/app/update/' . $request->getStage('app_id'),
+        $request,
+        $response
+    );
+});
+
+/**
+ *  Default route for model remove
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/system/model/app/remove/:app_id', function ($request, $response) {
+    //now let the object remove take over
+    $this->routeTo(
+        'get',
+        '/admin/app/remove/' . $request->getStage('app_id'),
+        $request,
+        $response
+    );
+});
+
+/**
+ *  Default route for model restore
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/system/model/app/restore/:app_id', function ($request, $response) {
+    //now let the object restore take over
+    $this->routeTo(
+        'get',
+        '/admin/app/restore/' . $request->getStage('app_id'),
+        $request,
+        $response
+    );
+});
+
+/**
+ *  Default route for model create
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->post('/admin/system/model/app/create', function ($request, $response) {
+    //now let the object create take over
+    $this->routeTo(
+        'post',
+        '/admin/app/create',
+        $request,
+        $response
+    );
+});
+
+/**
+ *  Default route for model update
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->post('/admin/system/model/app/update/:app_id', function ($request, $response) {
+    //now let the object update take over
+    $this->routeTo(
+        'post',
+        '/admin/app/update/' . $request->getStage('app_id'),
+        $request,
+        $response
+    );
+});
