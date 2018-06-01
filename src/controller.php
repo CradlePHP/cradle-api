@@ -16,6 +16,11 @@
 $this->get('/rest/:schema/search', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -52,6 +57,11 @@ $this->get('/rest/:schema/search', function ($request, $response) {
 $this->get('/rest/:schema1/:id/search/:schema2', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -88,6 +98,11 @@ $this->get('/rest/:schema1/:id/search/:schema2', function ($request, $response) 
 $this->post('/rest/:schema/search', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -131,6 +146,11 @@ $this->post('/rest/:schema/search', function ($request, $response) {
 $this->post('/rest/:schema1/:id/search/:schema2', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -178,6 +198,11 @@ $this->post('/rest/:schema1/:id/search/:schema2', function ($request, $response)
 $this->post('/rest/:schema/create', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -221,6 +246,11 @@ $this->post('/rest/:schema/create', function ($request, $response) {
 $this->post('/rest/:schema1/:id/create/:schema2', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -268,6 +298,11 @@ $this->post('/rest/:schema1/:id/create/:schema2', function ($request, $response)
 $this->post('/rest/:schema/update/:id', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -313,6 +348,11 @@ $this->post('/rest/:schema/update/:id', function ($request, $response) {
 $this->get('/rest/:schema/remove/:id', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -348,6 +388,11 @@ $this->get('/rest/:schema/remove/:id', function ($request, $response) {
 $this->get('/rest/:schema/restore/:id', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -383,6 +428,11 @@ $this->get('/rest/:schema/restore/:id', function ($request, $response) {
 $this->post('/rest/:schema/import', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
 
     //----------------------------//
     // 2. Prepare Data
@@ -417,7 +467,12 @@ $this->post('/rest/:schema/import', function ($request, $response) {
 $this->get('/rest/:schema/export/:type', function ($request, $response) {
     //----------------------------//
     // 1. Route Permissions
+    $this->trigger('rest-permitted', $request, $response);
 
+    if ($response->isError()) {
+        return;
+    }
+    
     //----------------------------//
     // 2. Prepare Data
 
