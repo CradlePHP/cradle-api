@@ -111,6 +111,25 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label">{{_ 'Webhook Url'}}</label>
+            <input
+                class="form-control {{#if errors.webhook_url}}is-invalid{{/if}}"
+                placeholder="https://myapp.com/webhookpostreceiver"
+                name="webhook_url"
+                value="{{item.webhook_url}}"
+                type="text"
+            />
+            {{#if errors.webhook_url}}
+                <div class="invalid-feedback">
+                    {{errors.webhook_url}}
+                </div>
+            {{/if}}
+            <em>
+                {{_ 'this is required if any of the webhook below is checked'}}
+            </em>
+        </div>
+
+        <div class="form-group">
                 <table
                     class="table table-striped file-field"
                     data-accept="image/png,image/jpg,image/jpeg,image/gif"
@@ -179,7 +198,7 @@
             </table>
         </div>
 
-        <div class="form-group">
+        <div class="form-group checkboxes">
             <label class="control-label">{{_ 'Permissions'}}</label>
 
             {{#if roles}}
@@ -256,11 +275,11 @@
                                                 <input
                                                     class="form-check-input {{../role_id}}-webhook-checkbox"
                                                     id="webhook-{{id}}"
-                                                    name="app_webhooks[{{../role_id}}][]"
+                                                    name="webhook_events[{{../role_id}}][]"
                                                     type="checkbox"
                                                     value="{{id}}"
 
-                                                    {{#scope ../../item.app_webhooks ../role_id}}
+                                                    {{#scope ../../item.webhook_events ../role_id}}
                                                         {{#in this ../id}}
                                                             checked
                                                         {{/in}}
@@ -270,7 +289,7 @@
                                                     {{_ 'Enable Webhook'}}
                                                 </span>
                                             </label>
-                                            <small>
+                                            <small class="text-right">
                                                 {{path}}
                                             </small>
                                         </div>

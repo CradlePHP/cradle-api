@@ -12,7 +12,6 @@ require_once __DIR__ . '/src/events.php';
 require_once __DIR__ . '/src/controller.php';
 require_once __DIR__ . '/src/App/events.php';
 require_once __DIR__ . '/src/App/controller.php';
-require_once __DIR__ . '/src/App/Validator.php';
 require_once __DIR__ . '/src/Dialog/events.php';
 require_once __DIR__ . '/src/Dialog/controller.php';
 require_once __DIR__ . '/src/Session/events.php';
@@ -20,6 +19,7 @@ require_once __DIR__ . '/src/Session/controller.php';
 require_once __DIR__ . '/src/Session/Validator.php';
 require_once __DIR__ . '/src/Webhook/events.php';
 require_once __DIR__ . '/src/Webhook/controller.php';
+require_once __DIR__ . '/src/Webhook/Validator.php';
 require_once __DIR__ . '/package/helpers.php';
 
 //bootstrap

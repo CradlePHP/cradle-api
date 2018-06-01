@@ -200,7 +200,7 @@ $this->on('webhook-send', function ($request, $response) {
 
     //----------------------------//
     // 4. Process Data
-    Rest::i($url, true)
+    Rest::i($url)
         ->set($data)
         ->setNotificationType('Event')
         ->setEventType($event)
@@ -233,12 +233,12 @@ $this->on('webhook-subscription', function ($request, $response) {
         $errors['url'] = 'Invalid url';
     }
 
-    if (!isset($data['app_id']) || !$data['app_id']) {
-        $errors['app_id'] = 'Missing app_id';
+    if (!isset($data['webhook_id']) || !$data['webhook_id']) {
+        $errors['webhook_id'] = 'Missing webhook_id';
     }
 
-    if (!isset($data['app_updated']) || !$data['app_updated']) {
-        $errors['app_updated'] = 'Missing app_updated';
+    if (!isset($data['webhook_updated']) || !$data['webhook_updated']) {
+        $errors['webhook_updated'] = 'Missing webhook_updated';
     }
 
     //----------------------------//
@@ -249,12 +249,12 @@ $this->on('webhook-subscription', function ($request, $response) {
     }
 
     $host = $protocol . '://' . $request->getServer('HTTP_HOST');
-    $host .= '/webhook/' . $data['app_id'] . '/subscription/';
-    $host .= md5($data['app_updated']);
+    $host .= '/webhook/' . $data['webhook_id'] . '/subscription/';
+    $host .= md5($data['webhook_updated']);
 
     //----------------------------//
     // 4. Process Data
-    Rest::i($url, true)
+    Rest::i($data['url'])
         ->setSubscriptionUrl($host)
         ->setNotificationType('SubscriptionConfirmation')
         ->post();

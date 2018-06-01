@@ -202,43 +202,6 @@ return array (
     ),
     6 =>
     array (
-      'label' => 'Webhook Url',
-      'name' => 'webhook_url',
-      'field' =>
-      array (
-        'type' => 'url',
-      ),
-      'validation' =>
-      array (
-        0 =>
-        array (
-          'method' => 'url',
-          'message' => 'Invalid webhook url',
-        ),
-      ),
-      'list' =>
-      array (
-        'format' => 'link',
-        'parameters' =>
-        array (
-          0 => '{{app_webhook_url}}',
-          1 => '{{app_webhook_url}}',
-        ),
-      ),
-      'detail' =>
-      array (
-        'format' => 'link',
-        'parameters' =>
-        array (
-          0 => '{{app_webhook_url}}',
-          1 => '{{app_webhook_url}}',
-        ),
-      ),
-      'default' => '',
-      'disable' => '1',
-    ),
-    7 =>
-    array (
       'label' => 'Token',
       'name' => 'token',
       'field' =>
@@ -264,7 +227,7 @@ return array (
       'default' => '',
       'disable' => '1',
     ),
-    8 =>
+    7 =>
     array (
       'label' => 'Secret',
       'name' => 'secret',
@@ -291,7 +254,7 @@ return array (
       'default' => '',
       'disable' => '1',
     ),
-    9 =>
+    8 =>
     array (
       'label' => 'Type',
       'name' => 'type',
@@ -310,7 +273,7 @@ return array (
       'default' => '',
       'disable' => '1',
     ),
-    10 =>
+    9 =>
     array (
       'label' => 'Active',
       'name' => 'active',
@@ -331,7 +294,7 @@ return array (
       'sortable' => '1',
       'disable' => '1',
     ),
-    11 =>
+    10 =>
     array (
       'label' => 'Permissions',
       'name' => 'permissions',
@@ -350,26 +313,7 @@ return array (
       'default' => '',
       'disable' => '1',
     ),
-    12 =>
-    array (
-      'label' => 'Webhooks',
-      'name' => 'webhooks',
-      'field' =>
-      array (
-        'type' => 'rawjson',
-      ),
-      'list' =>
-      array (
-        'format' => 'hide',
-      ),
-      'detail' =>
-      array (
-        'format' => 'hide',
-      ),
-      'default' => '',
-      'disable' => '1',
-    ),
-    13 =>
+    11 =>
     array (
       'label' => 'Created',
       'name' => 'created',
@@ -391,7 +335,7 @@ return array (
       'sortable' => '1',
       'disable' => '1',
     ),
-    14 =>
+    12 =>
     array (
       'label' => 'Updated',
       'name' => 'updated',
@@ -420,6 +364,11 @@ return array (
     array (
       'many' => '1',
       'name' => 'auth',
+    ),
+    1 =>
+    array (
+    'many' => '1',
+    'name' => 'webhook',
     ),
   ),
   'suggestion' => '{{app_name}} - {{app_slug}}',

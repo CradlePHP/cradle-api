@@ -13,7 +13,7 @@ use Cradle\Package\System\Exception;
 use Cradle\Http\Request;
 use Cradle\Http\Response;
 
- use Cradle\Package\Api\App\Validator;
+ use Cradle\Package\Api\Webhook\Validator;
 
 /**
  * Creates an App
@@ -34,26 +34,20 @@ $this->on('app-create', function ($request, $response) {
             ->set('json', 'validation', $errors);
     }
 
+    if ($request->getStage('webhook_url')) {
+        //trigger model create
+        $this->trigger('webhook-create', $request, $response);
+
+        if (!$response->isError()) {
+            $request->setStage('webhook_id', $response->getResults('webhook_id'));
+        }
+    }
+
     //set app as schema
     $request->setStage('schema', 'app');
 
     //trigger model create
     $this->trigger('system-model-create', $request, $response);
-
-    // if there's no error and there is a webhook url
-    // we have to send a subscription confirmation
-    if (!$response->isError() && !empty($response->getResults('app_webhook_url'))) {
-        $results = $response->getResults();
-
-        $hash = md5($results['app_updated']);
-        $request->setStage('app_id', $results['app_id']);
-        $request->setStage('app_updated', $results['app_updated']);
-        $request->setStage('url', $results['app_webhook_url']);
-
-        $this->trigger('webhook-subscription', $request, $response);
-
-        $response->setResults($results);
-    }
 });
 
 /**

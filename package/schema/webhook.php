@@ -52,33 +52,6 @@ return array (
     ),
     1 =>
     array (
-      'label' => 'Secret',
-      'name' => 'secret',
-      'field' =>
-      array (
-        'type' => 'text',
-      ),
-      'validation' =>
-      array (
-        0 =>
-        array (
-          'method' => 'required',
-          'message' => 'Secret is required',
-        ),
-      ),
-      'list' =>
-      array (
-        'format' => 'none',
-      ),
-      'detail' =>
-      array (
-        'format' => 'none',
-      ),
-      'default' => '',
-      'disable' => '1',
-    ),
-    2 =>
-    array (
       'label' => 'Type',
       'name' => 'type',
       'field' =>
@@ -96,7 +69,7 @@ return array (
       'default' => '',
       'disable' => '1',
     ),
-    3 =>
+    2 =>
     array (
         'label' => 'Events',
         'name' => 'events',
@@ -115,7 +88,7 @@ return array (
         'default' => '',
         'disable' => '1',
     ),
-    4 =>
+    3 =>
     array (
       'label' => 'Flag',
       'name' => 'flag',
@@ -136,7 +109,7 @@ return array (
       'sortable' => '1',
       'disable' => '1',
     ),
-    5 =>
+    4 =>
     array (
       'label' => 'Active',
       'name' => 'active',
@@ -157,7 +130,7 @@ return array (
       'sortable' => '1',
       'disable' => '1',
     ),
-    6 =>
+    5 =>
     array (
       'label' => 'Created',
       'name' => 'created',
@@ -179,7 +152,7 @@ return array (
       'sortable' => '1',
       'disable' => '1',
     ),
-    7 =>
+    6 =>
     array (
       'label' => 'Updated',
       'name' => 'updated',
