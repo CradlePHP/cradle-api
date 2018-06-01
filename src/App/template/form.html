@@ -27,15 +27,16 @@
             <label class="control-label">{{_ 'Name'}}</label>
             <input
                 class="form-control {{#if errors.app_name}}is-invalid{{/if}}"
-                placeholder="My Application"
                 name="app_name"
+                placeholder="{{_ 'My Application'}}"
+                type="text"
                 value="{{item.app_name}}"
-                type="text">
+            />
 
             {{#if errors.app_name}}
-            <div class="invalid-feedback">
-                {{errors.app_name}}
-            </div>
+                <div class="invalid-feedback">
+                    {{errors.app_name}}
+                </div>
             {{/if}}
         </div>
 
@@ -43,20 +44,20 @@
             <label class="control-label">{{_ 'Slug'}}</label>
             <input
                 class="form-control {{#if errors.app_slug}}is-invalid{{/if}}"
-                placeholder="app"
-                name="app_slug"
-                value="{{item.app_slug}}"
-                type="text"
                 data-do="slugger"
                 data-source="input[name=app_name]"
-                data-upper="0"
                 data-space="-"
-            >
+                data-upper="0"
+                name="app_slug"
+                placeholder="app"
+                type="text"
+                value="{{item.app_slug}}"
+            />
 
             {{#if errors.app_slug}}
-            <div class="invalid-feedback">
-                {{errors.app_slug}}
-            </div>
+                <div class="invalid-feedback">
+                    {{errors.app_slug}}
+                </div>
             {{/if}}
         </div>
 
@@ -65,13 +66,13 @@
             <textarea
                 class="form-control {{#if errors.app_description}}is-invalid{{/if}}"
                 name="app_description"
-                placeholder="My Application Description"
+                placeholder="{{_ 'My Application Description'}}"
             >{{item.app_description}}</textarea>
 
             {{#if errors.app_description}}
-            <div class="invalid-feedback">
-                {{errors.app_description}}
-            </div>
+                <div class="invalid-feedback">
+                    {{errors.app_description}}
+                </div>
             {{/if}}
         </div>
 
@@ -82,12 +83,13 @@
                 placeholder="*"
                 name="app_domain"
                 value="{{item.app_domain}}"
-                type="text">
+                type="text"
+            />
 
             {{#if errors.app_domain}}
-            <div class="invalid-feedback">
-                {{errors.app_domain}}
-            </div>
+                <div class="invalid-feedback">
+                    {{errors.app_domain}}
+                </div>
             {{/if}}
         </div>
 
@@ -98,33 +100,36 @@
                 placeholder="https://myapp.com"
                 name="app_website"
                 value="{{item.app_website}}"
-                type="text">
+                type="text"
+            />
 
             {{#if errors.app_website}}
-            <div class="invalid-feedback">
-                {{errors.app_website}}
-            </div>
+                <div class="invalid-feedback">
+                    {{errors.app_website}}
+                </div>
             {{/if}}
         </div>
 
         <div class="form-group">
                 <table
-                class="table table-striped file-field"
-                data-accept="image/png,image/jpg,image/jpeg,image/gif"
-                data-do="file-field"
-                data-name="app_icon"
-            >
+                    class="table table-striped file-field"
+                    data-accept="image/png,image/jpg,image/jpeg,image/gif"
+                    data-do="file-field"
+                    data-name="app_icon"
+                >
                 <thead>
                     <tr>
-                        <th>Preview</th>
-                        <th>Name</th>
+                        <th>{{_ 'Preview'}}</th>
+                        <th>{{_ 'Name'}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#scope item 'app_icon'}}
                         <tr class="file-field-none" style="display:none;">
                             <td colspan="5">
-                                <div class="alert alert-info">No File Selected</div>
+                                <div class="alert alert-info">
+                                    {{_ 'No File Selected'}}
+                                </div>
                             </td>
                         </tr>
                         <tr class="file-field-item" data-index="{INDEX}">
@@ -137,7 +142,9 @@
                                     {{else}}
                                         <div class="file-field-preview-container">
                                             <i class="fas fa-file text-info"></i>
-                                            <span class="file-field-extension">{{extension}}</span>
+                                            <span class="file-field-extension">
+                                                {{extension}}
+                                            </span>
                                         </div>
                                     {{/in}}
                                 {{/fileinfo}}
@@ -150,7 +157,9 @@
                     {{else}}
                         <tr class="file-field-none">
                             <td colspan="5">
-                                <div class="alert alert-info">No Image Selected</div>
+                                <span class="alert alert-info">
+                                    {{_ 'No Image Selected'}}
+                                </span>
                             </td>
                         </tr>
                     {{/scope}}
@@ -162,7 +171,7 @@
                                 class="file-field-upload btn btn-info"
                                 type="button"
                             >
-                                Choose Image
+                                {{_ 'Choose Image'}}
                             </button>
                         </td>
                     </tr>
@@ -177,31 +186,52 @@
                 {{#each roles}}
                     <ul class="list-group mb-3">
                         <li class="list-group-item">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input checkall" id="{{role_name}}">
-                                <label class="form-check-label font-weight-bold" for="{{role_name}}">{{role_name}}</label>
+                            <div class="row">
+                                <label class="col-sm-3 checkbox checkbox-1">
+                                    <input
+                                        class="form-check-input"
+                                        data-do="custom-checkall"
+                                        data-target="{{role_id}}-permission-checkbox"
+                                        id="{{role_name}}"
+                                        type="checkbox"
+                                    />
+                                    <span>
+                                        {{_ 'All %s Permissions' role_name}}
+                                    </span>
+                                </label>
+                                <label class="col-sm- checkbox checkbox-1">
+                                    <input
+                                        class="form-check-input"
+                                        data-do="custom-checkall"
+                                        data-target="{{role_id}}-webhook-checkbox"
+                                        id="{{role_name}}"
+                                        type="checkbox"
+                                    />
+                                    <span>
+                                        {{_ 'All %s Webhooks' role_name}}
+                                    </span>
+                                </label>
                             </div>
-
                             <ul class="list-group mt-3">
                                 {{#each role_permissions}}
                                     <li class="list-group-item">
-                                        <div class="form-check d-flex w-100 justify-content-between">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input"
-                                                id="permission-{{id}}"
-                                                name="app_permissions[{{../role_id}}][]"
-                                                value="{{id}}"
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <label class="checkbox checkbox-1">
+                                                <input
+                                                    class="form-check-input {{../role_id}}-permission-checkbox"
+                                                    id="permission-{{id}}"
+                                                    name="app_permissions[{{../role_id}}][]"
+                                                    type="checkbox"
+                                                    value="{{id}}"
 
-                                                {{#scope ../../item.app_permissions ../role_id}}
-                                                    {{#in this ../id}}
-                                                        checked
-                                                    {{/in}}
-                                                {{/scope}}
-                                            >
-                                            <label class="form-check-label" for="permission-{{id}}">
-                                                {{label}}&nbsp;
-                                                <span class="
+                                                    {{#scope ../../item.app_permissions ../role_id}}
+                                                        {{#in this ../id}}
+                                                            checked
+                                                        {{/in}}
+                                                    {{/scope}}
+                                                />
+                                                <span>{{label}}</span>&nbsp;
+                                                <div class="
                                                     badge
                                                     {{#when method '===' 'get'}}
                                                     badge-success
@@ -220,23 +250,25 @@
                                                     {{/when}}
 
                                                     badge-pill
-                                                ">{{upper method}}</span>
+                                                ">{{upper method}}</div>
                                             </label>
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input"
-                                                id="webhook-{{id}}"
-                                                name="app_webhooks[{{../role_id}}][]"
-                                                value="{{id}}"
+                                            <label class="checkbox checkbox-1">
+                                                <input
+                                                    class="form-check-input {{../role_id}}-webhook-checkbox"
+                                                    id="webhook-{{id}}"
+                                                    name="app_webhooks[{{../role_id}}][]"
+                                                    type="checkbox"
+                                                    value="{{id}}"
 
-                                                {{#scope ../../item.app_webhooks ../role_id}}
-                                                    {{#in this ../id}}
-                                                        checked
-                                                    {{/in}}
-                                                {{/scope}}
-                                            >
-                                            <label class="form-check-label" for="webhook{{id}}">
-                                                {{_ 'Enable Webhook'}}
+                                                    {{#scope ../../item.app_webhooks ../role_id}}
+                                                        {{#in this ../id}}
+                                                            checked
+                                                        {{/in}}
+                                                    {{/scope}}
+                                                />
+                                                <span>
+                                                    {{_ 'Enable Webhook'}}
+                                                </span>
                                             </label>
                                             <small>
                                                 {{path}}
@@ -251,7 +283,7 @@
             {{else}}
                 <ul class="list-group">
                     <li class="list-group-item">
-                        You don't have any access permissions.
+                        {{_ 'You don't have any access permissions'}}.
                     </li>
                 </ul>
             {{/if}}
@@ -265,27 +297,3 @@
         <span class="help-text has-error"></span>
     </form>
 </div>
-
-<script type="text/javascript">
-    $(function() {
-        $('.checkall').change(function (e) {
-            var target = $(this);
-            var siblings = target
-                .parent()
-                .parent()
-                .find('ul li input[type="checkbox"]');
-
-            if (target.is(':checked')) {
-                siblings.each(function (index, element) {
-                    $(element).attr('checked', 'true')
-                });
-
-                return;
-            }
-
-            siblings.each(function (index, element) {
-                $(element).removeAttr('checked');
-            });
-        });
-    });
-</script>

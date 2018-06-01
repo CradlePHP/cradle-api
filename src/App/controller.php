@@ -49,7 +49,7 @@ $this->get('/admin/app/create', function ($request, $response) {
     //----------------------------//
     // 2. Render Template
     //Render body
-    $class = 'page-app-create';
+    $class = 'page-app-create page-app-form';
     $data['title'] = $this->package('global')->translate('Application Create');
     $data['action'] = 'create';
 
@@ -172,7 +172,7 @@ $this->get('/admin/app/update/:app_id', function ($request, $response) {
     //----------------------------//
     // 2. Render Template
     //Render body
-    $class = 'page-app-update';
+    $class = 'page-app-update page-app-form';
     $data['title'] = $this->package('global')->translate('Application Update');
 
     $body = $this
