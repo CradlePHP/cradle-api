@@ -73,7 +73,7 @@ class Validator
                 }
 
                 // code has to have less than 15 minutes life time
-                if (strtotime($results['session_created']) > strtotime('-15 miniutes')) {
+                if (time() > (strtotime($results['session_created']) + 900)) {
                     $errors['code'] = 'Authorization Code has expired';
                 }
 
