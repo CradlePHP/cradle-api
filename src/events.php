@@ -171,7 +171,7 @@ $cradle->on('rest-session-permitted', function ($request, $response) {
         ->innerJoinUsing('auth', 'auth_id')
         ->innerJoinUsing('profile', 'profile_id')
         ->filterBySessionToken($token)
-        ->filterBySessionStatus('ACCESS');
+        ->filterBySessionStatus('AUTHORIZED');
 
     // if not GET
     if ($secret) {
