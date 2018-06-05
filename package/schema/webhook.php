@@ -16,19 +16,6 @@ return array (
       array (
         'type' => 'url',
       ),
-      'validation' =>
-      array (
-        0 =>
-        array (
-          'method' => 'url',
-          'message' => 'Invalid website url',
-        ),
-        1 =>
-        array (
-          'method' => 'required',
-          'message' => 'Url url is required',
-        ),
-      ),
       'list' =>
       array (
         'format' => 'link',
