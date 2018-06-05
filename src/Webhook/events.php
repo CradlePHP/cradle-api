@@ -8,6 +8,7 @@
  */
 
 use Cradle\Curl\Rest;
+use Cradle\Storm\SqlFactory;
 
 /**
  * Creates a webhook
@@ -179,7 +180,7 @@ $this->on('webhook-send', function ($request, $response) {
     $errors = [];
     if (!isset($data['url'])
         || empty($data['url'])
-        || filter_var($data['url'], FILTER_VALIDATE_URL)) {
+        || !filter_var($data['url'], FILTER_VALIDATE_URL)) {
         $errors['url'] = 'Invalid url';
     }
 
@@ -193,17 +194,14 @@ $this->on('webhook-send', function ($request, $response) {
 
     //----------------------------//
     // 3. Prepare Data
-    $url = $data['url'];
-    $event = strtoupper($data['event']);
-    unset($data['url']);
-    unset($data['event']);
-
+    // nothing to prepare
     //----------------------------//
     // 4. Process Data
-    Rest::i($url)
-        ->set($data)
+    Rest::i($data['url'])
+        ->setData($data['webhook_data'])
         ->setNotificationType('Event')
-        ->setEventType($event)
+        ->setEventType($data['event'])
+        ->setResponseFormat('raw')
         ->post();
 
     $response->setError(false);
@@ -260,4 +258,129 @@ $this->on('webhook-subscription', function ($request, $response) {
         ->post();
 
     $response->setError(false);
+});
+
+
+/**
+ * Checks for webhook distribution
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->on('webhook-distribution', function ($request, $response) {
+    //----------------------------//
+    // 1. Get Data
+    $data = [];
+    if ($request->getStage()) {
+        $data = $request->getStage();
+    }
+    // 2. Validate Data
+    //----------------------------//
+    $errors = [];
+    if (!isset($data['uri']) || empty($data['uri'])) {
+        $errors['uri'] = 'URI is required';
+    }
+
+    if (!isset($data['method']) || empty($data['method'])) {
+        $errors['method'] = 'Method is required';
+    }
+
+    if (!isset($data['json_data']) || empty($data['json_data'])) {
+        $errors['json_data'] = 'JSON data is required';
+    }
+
+    if ($errors) {
+        return $response
+            ->setError(true, 'There are missing data for the webhook to work')
+            ->set('json', 'validation', $errors);
+    }
+
+    // 3. Prepare Data
+    //----------------------------//
+    $database = SqlFactory::load(cradle('global')->service('sql-main'));
+
+    // pull all the roles with the given uri
+    $roles = $database
+        ->search('role')
+        // ->addFilter("JSON_CONTAINS(role_permissions->'$[*].path', '\"" . $data['uri'] ."\"') = 1")
+        ->addFilter("JSON_SEARCH(role_permissions, 'one', %s) IS NOT NULL", $data['uri'])
+        ->getRows();
+
+    // if no roles for that, then there shouldn't be a webhook too
+    if (!$roles) {
+        return $response->setResults("No webhooks enrolled for this uri");
+    }
+
+    $roleIds = [];
+
+    // check roles pulled are of the same method as the given method
+    foreach ($roles as $rkey => $role) {
+        $role['role_permissions'] = json_decode($role['role_permissions'], true);
+        foreach ($role['role_permissions'] as $pkey => $permission) {
+            // if path is not the same as the given uri
+            // or the method is not the same ignore
+            if ($permission['path'] != $data['uri']
+                || $permission['method'] != $data['method']
+            ) {
+                continue;
+            }
+
+            $roleIds[$role['role_id']] = [
+                'role_id' => $role['role_id'],
+                'permission_id' => $permission['id'],
+                'event_name' => $permission['label']
+            ];
+        }
+    }
+
+    // pull all webhooks with these routes
+    // and it should be a confirmed susbcription
+    $webhooks = $database
+        ->search('webhook')
+        ->addFilter('webhook_flag = 1');
+
+    $where = [];
+
+    foreach ($roleIds as $role) {
+        $where[] = sprintf(
+            "JSON_SEARCH(webhook_events, 'one', '%s') IS NOT NULL",
+            $role['permission_id']
+        );
+    }
+
+    if ($where) {
+        $webhooks->addFilter('(' . implode(' OR ', $where) . ')');
+    }
+
+    $webhooks = $webhooks->getRows();
+    //----------------------------//
+    // 4. Process Data
+    // since we now have the webhook urls,
+    // we have to send it to them
+    foreach ($webhooks as $webhook) {
+        $events = json_decode($webhook['webhook_events'] , true);
+
+        $event = 'Unnamed Event';
+        foreach ($events as $permission => $role) {
+            if (isset($roleIds[$permission])) {
+                $event = $roleIds[$permission]['event_name'];
+                break;
+            }
+        }
+
+        // prepare data before sending
+        $send = [
+            'event' => $event,
+            'url' => $webhook['webhook_url'],
+            'webhook_data' => $data['json_data']
+        ];
+
+        try {
+            $this
+                ->package('cradlephp/cradle-queue')
+                ->queue('webhook-send', $send);
+        } catch (Exception $e) {
+            $response->setError(true, 'No queue');
+        }
+    }
 });
