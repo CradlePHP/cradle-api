@@ -128,6 +128,23 @@ $this->on('app-update', function ($request, $response) {
     //set app as schema
     $request->setStage('schema', 'app');
 
+    $this->trigger('system-model-detail', $request, $response);
+    $app = $response->getResults();
+
+    if (!empty($app['webhook_id'])) {
+        $request->setStage('webhook_id', $app['webhook_id']);
+
+        //trigger model create
+        $this->trigger('webhook-update', $request, $response);
+    } else {
+        //trigger model create
+        $this->trigger('webhook-create', $request, $response);
+
+        if (!$response->isError()) {
+            $request->setStage('webhook_id', $response->getResults('webhook_id'));
+        }
+    }
+
     //trigger model update
     $this->trigger('system-model-update', $request, $response);
 });
