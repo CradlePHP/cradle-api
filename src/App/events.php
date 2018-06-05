@@ -34,13 +34,12 @@ $this->on('app-create', function ($request, $response) {
             ->set('json', 'validation', $errors);
     }
 
-    if ($request->getStage('webhook_url')) {
-        //trigger model create
-        $this->trigger('webhook-create', $request, $response);
+    //trigger model create
+    $this->trigger('webhook-create', $request, $response);
 
-        if (!$response->isError()) {
-            $request->setStage('webhook_id', $response->getResults('webhook_id'));
-        }
+
+    if (!$response->isError()) {
+        $request->setStage('webhook_id', $response->getResults('webhook_id'));
     }
 
     //set app as schema
@@ -131,19 +130,10 @@ $this->on('app-update', function ($request, $response) {
     $this->trigger('system-model-detail', $request, $response);
     $app = $response->getResults();
 
-    if (!empty($app['webhook_id'])) {
-        $request->setStage('webhook_id', $app['webhook_id']);
-
-        //trigger model create
-        $this->trigger('webhook-update', $request, $response);
-    } else {
-        //trigger model create
-        $this->trigger('webhook-create', $request, $response);
-
-        if (!$response->isError()) {
-            $request->setStage('webhook_id', $response->getResults('webhook_id'));
-        }
-    }
+    $request->setStage('webhook_id', $app['webhook_id']);
+    
+    //trigger model create
+    $this->trigger('webhook-update', $request, $response);
 
     //trigger model update
     $this->trigger('system-model-update', $request, $response);

@@ -483,6 +483,72 @@ $this->post('/admin/app/update/:app_id', function ($request, $response) {
     $this->package('global')->redirect('/admin/app/search');
 });
 
+/**
+ * Resend App's Webhook Subscription
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/app/:app_id/subscription/resend', function ($request, $response) {
+    //----------------------------//
+    // 1. Prepare data
+    $redirect = '/admin/app/search';
+    if ($request->getStage('redirect_uri')) {
+        $redirect = $request->getStage('redirect_uri');
+    }
+
+    $this->trigger('app-detail', $request, $response);
+    // get app details
+    $app = $response->getResults();
+    //----------------------------//
+    // 2. Validate data
+    if (isset($app['webhook_flag']) && $app['webhook_flag']) {
+        return $response->setError(true, 'Subscription already confirmed!');
+    }
+
+    if (!isset($app['webhook_id']) || empty($app['webhook_id'])) {
+        return $response->setError(true, 'No webhook details provided');
+    }
+
+    if ($response->isError()) {
+        $message = $this
+            ->package('global')
+            ->translate($response->getMessage());
+
+        $this
+            ->package('global')
+            ->flash($message, 'error');
+        $this
+            ->package('global')
+            ->redirect($redirect);
+    }
+
+    //----------------------------//
+    // 3. Process data
+    $data = [
+        'webhook_id' => $app['webhook_id'],
+        'webhook_updated' => $app['webhook_updated'],
+        'url' => $app['webhook_url']
+    ];
+
+    try {
+        $this
+            ->package('cradlephp/cradle-queue')
+            ->queue('webhook-subscription', $data);
+    } catch (Exception $e) {
+        $response->setError(true, 'No queue');
+    }
+
+    $message = $this
+        ->package('global')
+        ->translate('Queued re-sending of subscription confirmation');
+    $this
+        ->package('global')
+        ->flash($message, 'success');
+    $this
+        ->package('global')
+        ->redirect($redirect);
+});
 
 // Catch default routing
 /**

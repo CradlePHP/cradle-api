@@ -41,12 +41,18 @@ $this->on('webhook-create', function ($request, $response) {
     if (!$response->isError()) {
         $results = $response->getResults();
 
-        $hash = md5($results['webhook_updated']);
-        $request->setStage('webhook_id', $results['webhook_id']);
-        $request->setStage('webhook_updated', $results['webhook_updated']);
-        $request->setStage('url', $results['webhook_url']);
+        $subscription = [
+            'webhook_id' => $results['webhook_id'],
+            'webhook_updated' => $results['webhook_updated'],
+            'url' => $results['webhook_url']
+        ];
 
-        $this->trigger('webhook-subscription', $request, $response);
+        try {
+            $this
+                ->package('cradlephp/cradle-queue')
+                ->queue('webhook-subscription', $subscription);
+        } catch (Exception $e) {
+        }
 
         $response->setResults($results);
     }
@@ -146,6 +152,14 @@ $this->on('webhook-update', function ($request, $response) {
         $data = $request->getStage();
     }
 
+    $this->trigger('webhook-detail', $request, $response);
+
+    if ($response->isError()) {
+        return;
+    }
+
+    $old = $response->getResults();
+
     //----------------------------//
     // 2. Prepare Data
     // set webhook as schema
@@ -155,10 +169,38 @@ $this->on('webhook-update', function ($request, $response) {
         $request->setStage('webhook_events', json_encode($data['webhook_events']));
     }
 
+    if ($request->hasStage('webhook_url')
+        && $request->getStage('webhook_url') !== $old['webhook_url']
+    ) {
+        $request->setStage('webhook_flag', 0);
+    }
+
     //----------------------------//
     // 3. Process Data
     // trigger model update
     $this->trigger('system-model-update', $request, $response);
+
+    if (!$response->isError()
+        && $request->hasStage('webhook_url')
+        && $request->getStage('webhook_url') !== $old['webhook_url']
+    ) {
+        $results = $response->getResults();
+
+        $subscription = [
+            'webhook_id' => $results['webhook_id'],
+            'webhook_updated' => $results['webhook_updated'],
+            'url' => $results['webhook_url']
+        ];
+
+        try {
+            $this
+                ->package('cradlephp/cradle-queue')
+                ->queue('webhook-subscription', $subscription);
+        } catch (Exception $e) {
+        }
+
+        $response->setResults($results);
+    }
 });
 
 /**

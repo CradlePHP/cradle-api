@@ -10,7 +10,7 @@
             </li>
         </ol>
     </nav>
-    
+
     <div class="main-padding">
         {{#when filter.app_active '===' '0'}}
             <h3 class="main-title">
@@ -29,7 +29,7 @@
                 {{/if}}
             </h3>
         {{/when}}
-    
+
         <div class="clearfix mb-4 search-actions">
             <div class="btn-group" role="group" aria-label="...">
                 <a class="btn btn-primary" href="?filter[app_active]=1">
@@ -39,14 +39,14 @@
                     {{_ 'Inactive'}}
                 </a>
             </div>
-    
+
             <div class="float-right">
                 <a class="btn btn-success" href="/admin/app/create">
                     <i class="fas fa-plus"></i> {{_ 'Create Application'}}
                 </a>
             </div>
         </div>
-    
+
         <form method="post">
             <div class="table-overflow">
             {{#if rows}}
@@ -55,14 +55,14 @@
                     <thead>
                         <tr>
                             <th>{{_ 'Actions'}}</th>
-                            <th>{{_ 'Slug'}}</th>                            
+                            <th>{{_ 'Slug'}}</th>
                             <th>{{_ 'Name'}}</th>
                             <th>{{_ 'Domain'}}</th>
                             <th>{{_ 'Website'}}</th>
                             <th>{{_ 'Token'}}</th>
-                            <th>{{_ 'Secret'}}</th>                            
+                            <th>{{_ 'Secret'}}</th>
+                            <th>{{_ 'Webhook Status'}}</th>
                             <th>{{_ 'Created'}}</th>
-                            <th>{{_ 'Updated'}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -108,11 +108,26 @@
                                 <td>
                                     {{chars app_secret 15}}...
                                 </td>
-                                <td>
-                                    {{date app_created 'Y-m-d H:i:s'}}
+                                <td class="text-center">
+                                    {{#if webhook_url}}
+                                        {{#if webhook_flag}}
+                                            <span class="text-success">
+                                                {{~upper 'confirmed'~}}
+                                            </span>
+                                        {{else}}
+                                            <span class="text-danger">
+                                                {{~upper 'pending confirmation'~}}
+                                            </span><br />
+                                            <a href="/admin/app/{{app_id}}/subscription/resend">
+                                                {{_ 'resend confirmation'}}
+                                            </a>
+                                        {{/if}}
+                                    {{else}}
+                                        N/A
+                                    {{/if}}
                                 </td>
                                 <td>
-                                    {{date app_updated 'Y-m-d H:i:s'}}
+                                    {{date app_created 'F j Y'}}
                                 </td>
                             </tr>
                         {{/each}}
@@ -128,9 +143,10 @@
             {{/if}}
             <ul class="pagination">
                 {{#pager total range}}
-                <li class="page-item {{#if active}}active{{/if}}"><a class="page-link" href="?{{href}}">{{page}}</a></li>
+                    <li class="page-item {{#if active}}active{{/if}}">
+                        <a class="page-link" href="?{{href}}">{{page}}</a>
+                    </li>
                 {{/pager}}
             </ul>
         </form>
     </div>
-    
