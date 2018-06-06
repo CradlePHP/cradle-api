@@ -379,6 +379,7 @@ $this->on('webhook-distribution', function ($request, $response) {
     // and it should be a confirmed susbcription
     $webhooks = $database
         ->search('webhook')
+        ->addFilter('webhook_active = 1')
         ->addFilter('webhook_flag = 1');
 
     $where = [];
