@@ -130,10 +130,14 @@ $this->on('app-update', function ($request, $response) {
     $this->trigger('system-model-detail', $request, $response);
     $app = $response->getResults();
 
-    $request->setStage('webhook_id', $app['webhook_id']);
-    
-    //trigger model create
-    $this->trigger('webhook-update', $request, $response);
+    $webhookRequest = new Request();
+    $webhookResponse =  new Response();
+
+    $webhookRequest->setStage($request->getStage());
+    $webhookRequest->setStage('webhook_id', $app['webhook_id']);
+
+    // //trigger model create
+    $this->trigger('webhook-update', $webhookRequest, $webhookResponse);
 
     //trigger model update
     $this->trigger('system-model-update', $request, $response);
