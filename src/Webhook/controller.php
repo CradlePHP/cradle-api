@@ -385,13 +385,17 @@ $this->get('/webhook/:app_id/subscription/:hash', function ($request, $response)
         return $response;
     }
 
-    $webhook = $response->getResults();
-    if ($data['hash'] != md5($webhook['app_updated'])) {
-        return $response->setError(true, 'invalid subscription');
+    $app = $response->getResults();
+
+    if ($data['hash'] != md5($app['app_updated'])) {
+        return $response
+            ->setError(true, 'invalid subscription')
+            ->setResults([]);
     }
 
     //----------------------------//
     // 2. Process Data
-    $request->setStage('app_webhook_flag', 1);
-    $this->trigger('app-update', $request, $response);
+    $request->setStage('webhook_id', $app['webhook_id']);
+    $request->setStage('webhook_flag', 1);
+    $this->trigger('webhook-update', $request, $response);
 });
