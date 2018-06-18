@@ -373,13 +373,13 @@ $this->post('/admin/webhook/update/:webhook_id', function ($request, $response) 
  * @param Request $request
  * @param Response $response
  */
-$this->get('/webhook/:app_id/subscription/:hash', function ($request, $response) {
+$this->get('/webhook/:webhook_id/subscription/:hash', function ($request, $response) {
     //----------------------------//
     // 1. Get Data
     $data = $request->getStage();
     //----------------------------//
     // 1. Validate Data
-    $this->trigger('app-detail', $request, $response);
+    $this->trigger('webhook-detail', $request, $response);
 
     if ($response->isError()) {
         return $response;
@@ -387,7 +387,7 @@ $this->get('/webhook/:app_id/subscription/:hash', function ($request, $response)
 
     $app = $response->getResults();
 
-    if ($data['hash'] != md5($app['app_updated'])) {
+    if ($data['hash'] != md5($app['webhook_updated'])) {
         return $response
             ->setError(true, 'invalid subscription')
             ->setResults([]);

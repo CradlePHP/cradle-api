@@ -37,7 +37,6 @@ $this->on('app-create', function ($request, $response) {
     //trigger model create
     $this->trigger('webhook-create', $request, $response);
 
-
     if (!$response->isError()) {
         $request->setStage('webhook_id', $response->getResults('webhook_id'));
     }
@@ -134,6 +133,7 @@ $this->on('app-update', function ($request, $response) {
     $webhookResponse =  new Response();
 
     $webhookRequest->setStage($request->getStage());
+    $webhookRequest->setServer($request->getServer());
     $webhookRequest->setStage('webhook_id', $app['webhook_id']);
 
     // //trigger model create

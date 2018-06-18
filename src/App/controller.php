@@ -525,9 +525,17 @@ $this->get('/admin/app/:app_id/subscription/resend', function ($request, $respon
 
     //----------------------------//
     // 3. Process data
+    $protocol = 'http';
+    if ($request->getServer('SERVER_PORT') === 443) {
+        $protocol = 'https';
+    }
+
+    $host = $protocol . '://' . $request->getServer('HTTP_HOST');
+    $host .= '/webhook/' . $app['webhook_id'] . '/subscription/';
+    $host .= md5($app['webhook_updated']);
+
     $data = [
-        'webhook_id' => $app['webhook_id'],
-        'webhook_updated' => $app['webhook_updated'],
+        'subscription_url' => $host,
         'url' => $app['webhook_url']
     ];
 

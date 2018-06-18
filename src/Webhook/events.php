@@ -41,9 +41,17 @@ $this->on('webhook-create', function ($request, $response) {
     if (!$response->isError()) {
         $results = $response->getResults();
 
+        $protocol = 'http';
+        if ($request->getServer('SERVER_PORT') === 443) {
+            $protocol = 'https';
+        }
+
+        $host = $protocol . '://' . $request->getServer('HTTP_HOST');
+        $host .= '/webhook/' . $results['webhook_id'] . '/subscription/';
+        $host .= md5($results['webhook_updated']);
+
         $subscription = [
-            'webhook_id' => $results['webhook_id'],
-            'webhook_updated' => $results['webhook_updated'],
+            'subscription_url' => $host,
             'url' => $results['webhook_url']
         ];
 
@@ -186,9 +194,17 @@ $this->on('webhook-update', function ($request, $response) {
     ) {
         $results = $response->getResults();
 
+        $protocol = 'http';
+        if ($request->getServer('SERVER_PORT') === 443) {
+            $protocol = 'https';
+        }
+
+        $host = $protocol . '://' . $request->getServer('HTTP_HOST');
+        $host .= '/webhook/' . $results['webhook_id'] . '/subscription/';
+        $host .= md5($results['webhook_updated']);
+
         $subscription = [
-            'webhook_id' => $results['webhook_id'],
-            'webhook_updated' => $results['webhook_updated'],
+            'subscription_url' => $host,
             'url' => $results['webhook_url']
         ];
 
@@ -273,29 +289,17 @@ $this->on('webhook-subscription', function ($request, $response) {
         $errors['url'] = 'Invalid url';
     }
 
-    if (!isset($data['webhook_id']) || !$data['webhook_id']) {
-        $errors['webhook_id'] = 'Missing webhook_id';
-    }
-
-    if (!isset($data['webhook_updated']) || !$data['webhook_updated']) {
-        $errors['webhook_updated'] = 'Missing webhook_updated';
+    if (!isset($data['subscription_url']) || !$data['subscription_url']) {
+        $errors['subscription_url'] = 'Missing subscription url';
     }
 
     //----------------------------//
     // 3. Prepare Data
-    $protocol = 'http';
-    if ($request->getServer('SERVER_PORT') === 443) {
-        $protocol = 'https';
-    }
-
-    $host = $protocol . '://' . $request->getServer('HTTP_HOST');
-    $host .= '/webhook/' . $data['webhook_id'] . '/subscription/';
-    $host .= md5($data['webhook_updated']);
-
+    // nothing to prepare
     //----------------------------//
     // 4. Process Data
     Rest::i($data['url'])
-        ->setSubscriptionUrl($host)
+        ->setSubscriptionUrl($data['subscription_url'])
         ->setNotificationType('SubscriptionConfirmation')
         ->post();
 
