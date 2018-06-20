@@ -69,11 +69,32 @@ $this->on('app-detail', function ($request, $response) {
  * @param Response $response
  */
 $this->on('app-remove', function ($request, $response) {
+    $app = [];
+
     //set app as schema
     $request->setStage('schema', 'app');
 
+    //trigger model detail
+    $this->trigger('system-model-detail', $request, $response);
+    if (!$response->isError()) {
+        $app = $response->getResults();
+    }
+
     //trigger model remove
     $this->trigger('system-model-remove', $request, $response);
+    $results = $response->getResults();
+
+    // we have to remove webhook also
+    if ($app) {
+        //set webhook as schema
+        $request->setStage('schema', 'webhook');
+        //set webhook id
+        $request->setStage('webhook_id', $app['webhook_id']);
+        //trigger model remove
+        $this->trigger('system-model-remove', $request, $response);
+
+        $response->setResults($results);
+    }
 });
 
 /**
@@ -83,11 +104,32 @@ $this->on('app-remove', function ($request, $response) {
  * @param Response $response
  */
 $this->on('app-restore', function ($request, $response) {
+    $app = [];
+
     //set app as schema
     $request->setStage('schema', 'app');
 
+    //trigger model detail
+    $this->trigger('system-model-detail', $request, $response);
+    if (!$response->isError()) {
+        $app = $response->getResults();
+    }
+
     //trigger model restore
     $this->trigger('system-model-restore', $request, $response);
+    $results = $response->getResults();
+
+    // we have to restore webhook also
+    if ($app) {
+        //set webhook as schema
+        $request->setStage('schema', 'webhook');
+        //set webhook id
+        $request->setStage('webhook_id', $app['webhook_id']);
+        //trigger model restore
+        $this->trigger('system-model-restore', $request, $response);
+
+        $response->setResults($results);
+    }
 });
 
 /**
