@@ -348,9 +348,15 @@ $this->on('webhook-distribution', function ($request, $response) {
     // pull all the roles with the given uri
     $roles = $database
         ->search('role')
-        // ->addFilter("JSON_CONTAINS(role_permissions->'$[*].path', '\"" . $data['uri'] ."\"') = 1")
         ->addFilter("JSON_SEARCH(role_permissions, 'one', %s) IS NOT NULL", $data['uri'])
         ->getRows();
+
+    $wildcards = $database
+        ->search('role')
+        ->addFilter("role_permissions->'$[*].path' REGEXP '\\\*'")
+        ->getRows();
+
+    $roles = array_merge($roles, $wildcards);
 
     // if no roles for that, then there shouldn't be a webhook too
     if (!$roles) {
@@ -365,9 +371,14 @@ $this->on('webhook-distribution', function ($request, $response) {
         foreach ($role['role_permissions'] as $pkey => $permission) {
             // if path is not the same as the given uri
             // or the method is not the same ignore
-            if ($permission['path'] != $data['uri']
-                || $permission['method'] != $data['method']
-            ) {
+            $condition = $permission['path'] != $data['uri'];
+
+            if (strpos($permission['path'], '*') !== FALSE) {
+                $path = str_replace('/', '\/', $permission['path']);
+                $condition = !preg_match('/' . $path . '/', $data['uri']);
+            }
+
+            if ($condition || $permission['method'] != $data['method']) {
                 continue;
             }
 
@@ -378,7 +389,7 @@ $this->on('webhook-distribution', function ($request, $response) {
             ];
         }
     }
-
+    
     // pull all webhooks with these routes
     // and it should be a confirmed susbcription
     $webhooks = $database

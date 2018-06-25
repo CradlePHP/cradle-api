@@ -64,7 +64,14 @@ $cradle->on('rest-permitted', function ($request, $response) {
         }
 
         foreach ($role['role_permissions'] as $endpoint) {
-            if ($method == $endpoint['method'] && $currentPath == $endpoint['path']) {
+            $condition = $currentPath == $endpoint['path'];
+
+            if (strpos($endpoint['path'], '*') !== FALSE) {
+                $path = str_replace('/', '\/', $endpoint['path']);
+                $condition = preg_match('/' . $path . '/', $currentPath);
+            }
+
+            if ($method == $endpoint['method'] && $condition) {
                 $authorized = true;
             }
         }
