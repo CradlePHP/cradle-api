@@ -52,9 +52,13 @@ $this->get('/admin/webhook/create', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('form', $data, [
-            'webhook_permission'
-        ]);
+        ->template(
+            'form',
+            $data,
+            ['webhook_permission'],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response
@@ -204,7 +208,13 @@ $this->get('/admin/webhook/search', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('search', $data);
+        ->template(
+            'search',
+            $data,
+            [],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response
@@ -270,9 +280,13 @@ $this->get('/admin/webhook/update/:webhook_id', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('form', $data, [
-            'webhook_permission'
-        ]);
+        ->template(
+            'form',
+            $data,
+            ['webhook_permission'],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response

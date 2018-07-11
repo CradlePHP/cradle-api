@@ -55,7 +55,14 @@ $this->get('/admin/app/create', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('App', 'form', $data);
+        ->template(
+            'App',
+            'form',
+            $data,
+            [],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response
@@ -104,7 +111,14 @@ $this->get('/admin/app/detail/:app_id', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('App', 'detail', $data);
+        ->template(
+            'App',
+            'detail',
+            $data,
+            [],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response
@@ -177,7 +191,14 @@ $this->get('/admin/app/update/:app_id', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('App', 'form', $data);
+        ->template(
+            'App',
+            'form',
+            $data,
+            [],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response
@@ -355,7 +376,14 @@ $this->get('/admin/app/search', function ($request, $response) {
 
     $body = $this
         ->package('cradlephp/cradle-api')
-        ->template('App', 'search', $data);
+        ->template(
+            'App',
+            'search',
+            $data,
+            [],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //Set Content
     $response
