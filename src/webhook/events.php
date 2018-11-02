@@ -84,10 +84,6 @@ $cradle->on('webhook-valid-search', function ($request, $response) {
         $results[$i]['calls'] = array_values($calls);
     }
 
-    if ($webhook['webhook_type'] === 'app') {
-
-    }
-
     $response->setResults([
         'rows' => $results,
         'total' => count($results)

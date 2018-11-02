@@ -6,7 +6,17 @@
  * distributed with this package.
  */
 
+use Cradle\Package\System\Schema;
+use Cradle\Package\System\Exception;
+
 return function($request, $response) {
+    try { //first test for webhook
+        $schema = Schema::i('webhook');
+    } catch (Exception $e) {
+        //if no webhook schema
+        return;
+    }
+
     //before we do any webhook processing,
     $queueAvailable = $this->isPackage('cradlephp/cradle-queue');
     $devMode = !!$this->package('global')->config('settings', 'debug_mode');

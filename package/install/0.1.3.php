@@ -142,7 +142,10 @@ cradle(function() {
 
             $payload['request']
                 ->setStage('role_id', $id)
-                ->setStage('role_admin_menu', $menu);
+                ->setStage(
+                    'role_admin_menu',
+                    json_encode($menu, JSON_PRETTY_PRINT)
+                );
 
             $this->trigger(
                 'system-model-update',
