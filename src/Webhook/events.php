@@ -1,444 +1,146 @@
 <?php //-->
 /**
- * This file is part of Cradle API Package.
- * (c) 2018 Sterling Technologies.
+ * This file is part of a package designed for the CradlePHP Project.
  *
  * Copyright and license information can be found at LICENSE.txt
  * distributed with this package.
  */
 
-use Cradle\Curl\Rest;
-use Cradle\Storm\SqlFactory;
+use Cradle\Package\System\Schema;
+use Cradle\Curl\CurlHandler;
 
 /**
- * Creates a webhook
+ * Gets all the rest calls given the source scopes
  *
  * @param Request $request
  * @param Response $response
  */
-$this->on('webhook-create', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    $data = [];
-    if($request->hasStage()) {
-        $data = $request->getStage();
-    }
+$cradle->on('webhook-valid-search', function ($request, $response) {
+    $results = [];
 
-    //----------------------------//
-    // 2. Prepare Data
-    // set webhook as schema
-    $request->setStage('schema', 'webhook');
-
-    if (isset($data['webhook_events'])) {
-        $request->setStage('webhook_events', json_encode($data['webhook_events']));
-    }
-
-    //----------------------------//
-    // 3. Process Data
-    // trigger model create
-    $this->trigger('system-model-create', $request, $response);
-
-    if (!$response->isError()) {
-        $results = $response->getResults();
-
-        $protocol = 'http';
-        if ($request->getServer('SERVER_PORT') === 443) {
-            $protocol = 'https';
-        }
-
-        $host = $protocol . '://' . $request->getServer('HTTP_HOST');
-        $host .= '/webhook/' . $results['webhook_id'] . '/subscription/';
-        $host .= md5($results['webhook_updated']);
-
-        $subscription = [
-            'subscription_url' => $host,
-            'url' => $results['webhook_url']
-        ];
-
-        try {
-            $this
-                ->package('cradlephp/cradle-queue')
-                ->queue('webhook-subscription', $subscription);
-        } catch (Exception $e) {
-        }
-
-        $response->setResults($results);
-    }
-});
-
-/**
- * Creates a webhook
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-detail', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    // unnecessary move to get data
-    //----------------------------//
-    // 2. Prepare Data
-    // set webhook as schema
-    $request->setStage('schema', 'webhook');
-    //----------------------------//
-    // 3. Process Data
-    // trigger model detail
-    $this->trigger('system-model-detail', $request, $response);
-});
-
-/**
- * Removes a webhook
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-remove', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    // unnecessary move to get data
-    //----------------------------//
-    // 2. Prepare Data
-    // set webhook as schema
-    $request->setStage('schema', 'webhook');
-    //----------------------------//
-    // 3. Process Data
-    // trigger model remove
-    $this->trigger('system-model-remove', $request, $response);
-});
-
-/**
- * Restores a webhook
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-restore', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    // unnecessary move to get data
-    //----------------------------//
-    // 2. Prepare Data
-    // set webhook as schema
-    $request->setStage('schema', 'webhook');
-    //----------------------------//
-    // 3. Process Data
-    // trigger model restore
-    $this->trigger('system-model-restore', $request, $response);
-});
-
-/**
- * Searches webhook
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-search', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    // unnecessary move to get data
-    //----------------------------//
-    // 2. Prepare Data
-    // set webhook as schema
-    $request->setStage('schema', 'webhook');
-    //----------------------------//
-    // 3. Process Data
-    // trigger model search
-    $this->trigger('system-model-search', $request, $response);
-});
-
-/**
- * Updates a webhook
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-update', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    $data = [];
-    if($request->hasStage()) {
-        $data = $request->getStage();
-    }
-
-    $this->trigger('webhook-detail', $request, $response);
-
-    if ($response->isError()) {
-        return;
-    }
-
-    $old = $response->getResults();
-
-    //----------------------------//
-    // 2. Prepare Data
-    // set webhook as schema
-    $request->setStage('schema', 'webhook');
-
-    if (isset($data['webhook_events'])) {
-        $request->setStage('webhook_events', json_encode($data['webhook_events']));
-    }
-
-    if ($request->hasStage('webhook_url')
-        && $request->getStage('webhook_url') !== $old['webhook_url']
-    ) {
-        $request->setStage('webhook_flag', 0);
-    }
-
-    //----------------------------//
-    // 3. Process Data
-    // trigger model update
-    $this->trigger('system-model-update', $request, $response);
-
-    if (!$response->isError()
-        && $request->hasStage('webhook_url')
-        && $request->getStage('webhook_url') !== $old['webhook_url']
-    ) {
-        $results = $response->getResults();
-
-        $protocol = 'http';
-        if ($request->getServer('SERVER_PORT') === 443) {
-            $protocol = 'https';
-        }
-
-        $host = $protocol . '://' . $request->getServer('HTTP_HOST');
-        $host .= '/webhook/' . $results['webhook_id'] . '/subscription/';
-        $host .= md5($results['webhook_updated']);
-
-        $subscription = [
-            'subscription_url' => $host,
-            'url' => $results['webhook_url']
-        ];
-
-        try {
-            $this
-                ->package('cradlephp/cradle-queue')
-                ->queue('webhook-subscription', $subscription);
-        } catch (Exception $e) {
-        }
-
-        $response->setResults($results);
-    }
-});
-
-/**
- * Performs webhook sending of data
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-send', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    $data = [];
-    if($request->hasStage()) {
-        $data = $request->getStage();
-    }
-
-    //----------------------------//
-    // 2. Validate Data
-    $errors = [];
-    if (!isset($data['url'])
-        || empty($data['url'])
-        || !filter_var($data['url'], FILTER_VALIDATE_URL)) {
-        $errors['url'] = 'Invalid url';
-    }
-
-    if (!isset($data['event']) || empty($data['event'])) {
-        $errors['event'] = 'Please specify event type';
-    }
-
-    if ($errors) {
-        return $response->setError(true, implode(',', $errors));
-    }
-
-    //----------------------------//
-    // 3. Prepare Data
-    // nothing to prepare
-    //----------------------------//
-    // 4. Process Data
-    Rest::i($data['url'])
-        ->setData($data['webhook_data'])
-        ->setNotificationType('Event')
-        ->setEventType($data['event'])
-        ->setResponseFormat('raw')
-        ->post();
-
-    $response->setError(false);
-});
-
-/**
- * Performs sending of subscription notification
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-subscription', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    $data = [];
-    if($request->hasStage()) {
-        $data = $request->getStage();
-    }
-
-    //----------------------------//
-    // 2. Validate Data
-    $errors = [];
-    if (!isset($data['url'])
-        || empty($data['url'])
-        || filter_var($data['url'], FILTER_VALIDATE_URL)
-    ) {
-        $errors['url'] = 'Invalid url';
-    }
-
-    if (!isset($data['subscription_url']) || !$data['subscription_url']) {
-        $errors['subscription_url'] = 'Missing subscription url';
-    }
-
-    //----------------------------//
-    // 3. Prepare Data
-    // nothing to prepare
-    //----------------------------//
-    // 4. Process Data
-    Rest::i($data['url'])
-        ->setSubscriptionUrl($data['subscription_url'])
-        ->setNotificationType('SubscriptionConfirmation')
-        ->post();
-
-    $response->setError(false);
-});
-
-
-/**
- * Checks for webhook distribution
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('webhook-distribution', function ($request, $response) {
-    //----------------------------//
-    // 1. Get Data
-    $data = [];
-    if ($request->getStage()) {
-        $data = $request->getStage();
-    }
-    // 2. Validate Data
-    //----------------------------//
-    $errors = [];
-    if (!isset($data['uri']) || empty($data['uri'])) {
-        $errors['uri'] = 'URI is required';
-    }
-
-    if (!isset($data['method']) || empty($data['method'])) {
-        $errors['method'] = 'Method is required';
-    }
-
-    if (!isset($data['json_data']) || empty($data['json_data'])) {
-        $errors['json_data'] = 'JSON data is required';
-    }
-
-    if ($errors) {
-        return $response
-            ->setError(true, 'There are missing data for the webhook to work')
-            ->set('json', 'validation', $errors);
-    }
-
-    // 3. Prepare Data
-    //----------------------------//
-    $database = SqlFactory::load(cradle('global')->service('sql-main'));
-
-    // pull all the roles with the given uri
-    $roles = $database
-        ->search('role')
-        ->addFilter("JSON_SEARCH(role_permissions, 'one', %s) IS NOT NULL", $data['uri'])
+    //only get the webhooks that are being
+    //listened to and have valid webhook URLS
+    $rows = Schema::i('webhook')
+        ->model()
+        ->service('sql')
+        ->getResource()
+        ->search('app_webhook')
+        ->innerJoinUsing('app', 'app_id')
+        ->innerJoinUsing('webhook', 'webhook_id')
+        ->innerJoinUsing('app_profile', 'app_id')
+        ->addFilter('app_webhook IS NOT NULL AND app_webhook !=\'\'')
+        ->filterByAppActive(1)
+        ->filterByWebhookActive(1)
         ->getRows();
 
-    $wildcards = $database
-        ->search('role')
-        ->addFilter("role_permissions->'$[*].path' REGEXP '\\\*'")
-        ->getRows();
-
-    $roles = array_merge($roles, $wildcards);
-
-    // if no roles for that, then there shouldn't be a webhook too
-    if (!$roles) {
-        return $response->setResults("No webhooks enrolled for this uri");
-    }
-
-    $roleIds = [];
-
-    // check roles pulled are of the same method as the given method
-    foreach ($roles as $rkey => $role) {
-        $role['role_permissions'] = json_decode($role['role_permissions'], true);
-        foreach ($role['role_permissions'] as $pkey => $permission) {
-            // if path is not the same as the given uri
-            // or the method is not the same ignore
-            $condition = $permission['path'] != $data['uri'];
-
-            if (strpos($permission['path'], '*') !== FALSE) {
-                $path = str_replace('/', '\/', $permission['path']);
-                $condition = !preg_match('/' . $path . '/', $data['uri']);
-            }
-
-            if ($condition || $permission['method'] != $data['method']) {
-                continue;
-            }
-
-            $roleIds[$role['role_id']] = [
-                'role_id' => $role['role_id'],
-                'permission_id' => $permission['id'],
-                'event_name' => $permission['label']
-            ];
-        }
-    }
-    
-    // pull all webhooks with these routes
-    // and it should be a confirmed susbcription
-    $webhooks = $database
-        ->search('webhook')
-        ->addFilter('webhook_active = 1')
-        ->addFilter('webhook_flag = 1');
-
-    $where = [];
-
-    foreach ($roleIds as $role) {
-        $where[] = sprintf(
-            "JSON_SEARCH(webhook_events, 'one', '%s') IS NOT NULL",
-            $role['permission_id']
+    foreach ($rows as $row) {
+        $row['webhook_parameters'] = json_decode(
+            $row['webhook_parameters'],
+            true
         );
-    }
 
-    if ($where) {
-        $webhooks->addFilter('(' . implode(' OR ', $where) . ')');
-    }
+        if (!is_array($row['webhook_parameters'])) {
+            $row['webhook_parameters'] = [];
+        }
 
-    $webhooks = $webhooks->getRows();
-    //----------------------------//
-    // 4. Process Data
-    // since we now have the webhook urls,
-    // we have to send it to them
-    foreach ($webhooks as $webhook) {
-        $events = json_decode($webhook['webhook_events'] , true);
+        $id = $row['webhook_id'];
 
-        $event = 'Unnamed Event';
-        foreach ($events as $permission => $role) {
-            if (isset($roleIds[$permission])) {
-                $event = $roleIds[$permission]['event_name'];
-                break;
+        //add the webhook
+        if (!isset($results[$id])) {
+            $results[$id] = $row;
+            foreach ($results[$id] as $key => $value) {
+                if (strpos($key, 'app_') === 0
+                    || strpos($key, 'profile_') === 0
+                ) {
+                    unset($results[$id][$key]);
+                }
             }
         }
 
-        // prepare data before sending
-        $send = [
-            'event' => $event,
-            'url' => $webhook['webhook_url'],
-            'webhook_data' => $data['json_data']
+        //add to app
+        $results[$id]['calls'][$row['app_id']] = [
+            'url' => $row['app_webhook'],
+            'profile' => $row['profile_id']
         ];
-
-        try {
-            $this
-                ->package('cradlephp/cradle-queue')
-                ->queue('webhook-send', $send);
-        } catch (Exception $e) {
-            $response->setError(true, 'No queue');
-        }
     }
+
+    //clean up results
+    $results = array_values($results);
+    foreach ($results as $i => $webhook) {
+        $calls = [];
+        //this logic is to reduce the minimum calls performed
+        foreach ($results[$i]['calls'] as $call) {
+            //by default unique by url
+            $id = $call['url'];
+            //if this webhook is a user type
+            if ($webhook['webhook_type'] === 'user') {
+                //unique by url + profile
+                $id = $call['profile'] . $call['url'];
+            }
+
+            $calls[$id] = $call;
+        }
+
+        $results[$i]['calls'] = array_values($calls);
+    }
+
+    if ($webhook['webhook_type'] === 'app') {
+
+    }
+
+    $response->setResults([
+        'rows' => $results,
+        'total' => count($results)
+    ]);
+});
+
+/**
+ * Gets all the rest calls given the source scopes
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$cradle->on('webhook-call', function ($request, $response) {
+    $url = $request->getStage('url');
+    $action = $request->getStage('action');
+    $method = $request->getStage('method');
+    $results = $request->getStage('results');
+
+    $payload = [
+        'action' => $action,
+        'data' => $results
+    ];
+
+    CurlHandler::i()
+        ->setUrl($url)
+        ->when(
+            strpos($url, 'https') === 0,
+            function () {
+                $this
+                    ->verifyPeer(false)
+                    ->verifyHost(false);
+            }
+        )
+        ->setCustomRequest(strtoupper($method))
+        ->when(
+            $method === 'get' || $method === 'delete',
+            function () use (&$url, &$payload) {
+                $query = http_build_query($payload);
+                $separator = '?';
+                if (strpos($url, '?') !== false) {
+                    $separator = '&';
+                }
+
+                $this->setUrl($url . $separator . $query);
+
+            },
+            //else (post or put)
+            function () use (&$payload) {
+                $this->setPostFields(
+                    $payload,
+                    CurlHandler::ENCODE_JSON
+                );
+            }
+        )
+        ->send();
 });

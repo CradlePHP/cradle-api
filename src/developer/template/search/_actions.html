@@ -1,0 +1,14 @@
+<div class="clearfix mb-4 search-actions">
+    <div class="float-right">
+        <a class="btn btn-success" href="/developer/app/create?redirect_uri={{redirecturl}}">
+            <i class="fas fa-plus"></i> {{_ 'Create %s' schema.singular}}
+        </a>
+    </div>
+    <h3 class="main-title">
+        <i class="fa fa-{{schema.icon}}"></i>
+        {{number total}} {{schema.plural}}
+        {{#if q.0}}
+            {{_ 'matching'}} {{q.0}}
+        {{/if}}
+    </h3>
+</div>

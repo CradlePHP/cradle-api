@@ -1,10 +1,10 @@
 <?php //-->
 return [
-    'singular' => 'Webhook',
-    'plural' => 'Webhooks',
-    'name' => 'webhook',
-    'icon' => 'fas fa-comments',
-    'detail' => 'Manages Webhooks for applications registered on the system',
+    'singular' => 'REST Call',
+    'plural' => 'REST Calls',
+    'name' => 'rest',
+    'icon' => 'fas fa-flask',
+    'detail' => 'Manages REST calls for applications registered on the system',
     'fields' => [
         [
             'label' => 'Title',
@@ -34,6 +34,10 @@ return [
                 'type' => 'select',
                 'options' => [
                     [
+                        'key' => 'public',
+                        'value' => 'Public'
+                    ],
+                    [
                         'key' => 'app',
                         'value' => 'App'
                     ],
@@ -41,7 +45,7 @@ return [
                         'key' => 'user',
                         'value' => 'User'
                     ]
-                ],
+                ]
             ],
             'validation' => [
                 [
@@ -50,9 +54,12 @@ return [
                 ],
                 [
                     'method' => 'one',
-                    'parameters' => [ 'app', 'user'
+                    'parameters' => [
+                        'public',
+                        'app',
+                        'user'
                     ],
-                    'message' => 'Should be one of: app or user'
+                    'message' => 'Should be one of: public, app or user'
                 ]
             ],
             'list' => [
@@ -61,26 +68,83 @@ return [
             'detail' => [
                 'format' => 'lower'
             ],
-            'default' => 'app',
+            'default' => 'public',
             'filterable' => '1'
         ],
         [
-            'label' => 'Detail',
-            'name' => 'detail',
+            'label' => 'Method',
+            'name' => 'method',
             'field' => [
-                'type' => 'markdown'
+                'type' => 'select',
+                'options' => [
+                    [
+                        'key' => 'all',
+                        'value' => 'ALL'
+                    ],
+                    [
+                        'key' => 'get',
+                        'value' => 'GET'
+                    ],
+                    [
+                        'key' => 'post',
+                        'value' => 'POST'
+                    ],
+                    [
+                        'key' => 'put',
+                        'value' => 'PUT'
+                    ],
+                    [
+                        'key' => 'delete',
+                        'value' => 'DELETE'
+                    ]
+                ]
             ],
             'validation' => [
                 [
                     'method' => 'required',
-                    'message' => 'Detail is required'
+                    'message' => 'Method is required'
+                ],
+                [
+                    'method' => 'one',
+                    'parameters' => [
+                        'all',
+                        'get',
+                        'post',
+                        'put',
+                        'delete'
+                    ],
+                    'message' => 'Should be one of: all, get, post, put or delete'
                 ]
             ],
             'list' => [
-                'format' => 'hide'
+                'format' => 'upper'
             ],
             'detail' => [
-                'format' => 'markdown'
+                'format' => 'upper'
+            ],
+            'default' => 'all',
+            'filterable' => '1'
+        ],
+        [
+            'label' => 'Path',
+            'name' => 'path',
+            'field' => [
+                'type' => 'text',
+                'attributes' => [
+                    'placeholder' => 'ex. /post/search ... not including /rest'
+                ]
+            ],
+            'validation' => [
+                [
+                    'method' => 'required',
+                    'message' => 'Path is required'
+                ]
+            ],
+            'list' => [
+                'format' => 'none'
+            ],
+            'detail' => [
+                'format' => 'none'
             ],
             'default' => '',
             'searchable' => '1'
@@ -124,73 +188,38 @@ return [
             'default' => ''
         ],
         [
-            'label' => 'Method',
-            'name' => 'method',
+            'label' => 'Detail',
+            'name' => 'detail',
             'field' => [
-                'type' => 'select',
-                'options' => [
-                    [
-                        'key' => 'get',
-                        'value' => 'GET'
-                    ],
-                    [
-                        'key' => 'post',
-                        'value' => 'POST'
-                    ],
-                    [
-                        'key' => 'put',
-                        'value' => 'PUT'
-                    ],
-                    [
-                        'key' => 'delete',
-                        'value' => 'DELETE'
-                    ]
-                ],
-            ],
-            'validation' => [
-                [
-                    'method' => 'required',
-                    'message' => 'Method is required'
-                ],
-                [
-                    'method' => 'one',
-                    'parameters' => [ 'get', 'post', 'put', 'delete'
-                    ],
-                    'message' => 'Should be one of: all, get, post, put or delete'
+                'type' => 'markdown',
+                'attributes' => [
+                    'rows' => '5'
                 ]
             ],
             'list' => [
-                'format' => 'upper'
+                'format' => 'hide'
             ],
             'detail' => [
-                'format' => 'upper'
+                'format' => 'markdown'
             ],
-            'default' => 'all',
-            'filterable' => '1'
+            'default' => ''
         ],
         [
-            'label' => 'Action',
-            'name' => 'action',
+            'label' => 'Sample Request',
+            'name' => 'sample_request',
             'field' => [
-                'type' => 'text',
+                'type' => 'markdown',
                 'attributes' => [
-                    'placeholder' => 'ex. post-create'
-                ]
-            ],
-            'validation' => [
-                [
-                    'method' => 'required',
-                    'message' => 'Action is required'
+                    'rows' => '5'
                 ]
             ],
             'list' => [
-                'format' => 'none'
+                'format' => 'hide'
             ],
             'detail' => [
-                'format' => 'none'
+                'format' => 'markdown'
             ],
             'default' => '',
-            'searchable' => '1'
         ],
         [
             'label' => 'Sample Response',
@@ -222,6 +251,7 @@ return [
                 'format' => 'hide'
             ],
             'default' => '1',
+            'filterable' => '1',
             'sortable' => '1'
         ],
         [
@@ -255,5 +285,5 @@ return [
             'sortable' => '1'
         ]
     ],
-    'suggestion' => '{{webhook_title}}'
+    'suggestion' => '{{rest_title}}',
 ];

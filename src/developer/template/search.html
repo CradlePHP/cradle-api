@@ -1,0 +1,47 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <i class="fas fa-{{schema.icon}}"></i> {{schema.plural}}
+        </li>
+    </ol>
+</nav>
+
+<div class="main-padding mt-4">
+    {{#if rows.length}}
+        {{> search_actions}}
+
+        <div class="table-overflow">
+            <table class="table table-responsive-sm table-striped table-data">
+                <thead>
+                    {{> search_head}}
+                </thead>
+                <tbody>
+                    {{#each rows}}
+                        <tr data-id="{{scope this ../schema.primary}}">
+                            <td class="table-actions" nowrap>
+                                {{> search_row_actions}}
+                            </td>
+                            {{> search_row_format}}
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+        <ul class="pagination">
+            {{#pager total range}}
+                <li class="page-item{{#if active}} active{{/if}}">
+                    <a class="page-link" href="?{{href}}">{{page}}</a>
+                </li>
+            {{/pager}}
+        </ul>
+    {{else}}
+        {{> search_actions}}
+
+        <!-- START: NO RESULTS -->
+        <div class="alert alert-info no-results">
+            <center>{{_ 'No Results Found.'}}</center>
+        </div>
+        <!-- END: NO RESULTS -->
+    {{/if}}
+</div>

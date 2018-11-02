@@ -8,19 +8,17 @@
  */
 
 require_once __DIR__ . '/package/events.php';
-require_once __DIR__ . '/src/events.php';
-require_once __DIR__ . '/src/controller.php';
-require_once __DIR__ . '/src/App/events.php';
-require_once __DIR__ . '/src/App/controller.php';
-require_once __DIR__ . '/src/Dialog/events.php';
-require_once __DIR__ . '/src/Dialog/controller.php';
-require_once __DIR__ . '/src/Session/events.php';
-require_once __DIR__ . '/src/Session/controller.php';
-require_once __DIR__ . '/src/Session/Validator.php';
-require_once __DIR__ . '/src/Webhook/events.php';
-require_once __DIR__ . '/src/Webhook/controller.php';
-require_once __DIR__ . '/src/Webhook/Validator.php';
 require_once __DIR__ . '/package/helpers.php';
+require_once __DIR__ . '/src/app/controller.php';
+require_once __DIR__ . '/src/app/events.php';
+require_once __DIR__ . '/src/dialog/events.php';
+require_once __DIR__ . '/src/rest/controller.php';
+require_once __DIR__ . '/src/rest/events.php';
+require_once __DIR__ . '/src/webhook/events.php';
+require_once __DIR__ . '/src/developer/events.php';
 
 //bootstrap
-$this->preprocess(include __DIR__ . '/src/helpers.php');
+$this
+    ->preprocess(include __DIR__ . '/src/bootstrap/controller.php')
+    ->preprocess(include __DIR__ . '/src/bootstrap/rest.php')
+    ->preprocess(include __DIR__ . '/src/bootstrap/webhooks.php');

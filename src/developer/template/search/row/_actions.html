@@ -1,0 +1,31 @@
+<a
+    class="text-orange"
+    href="/dialog/request?client_id={{app_token}}&redirect_uri={{redirecturl}}"
+    title="{{_ 'OAuth Test'}}"
+>
+    <i class="fa fa-flask"></i>
+</a>
+&nbsp;
+<a
+    class="text-warning"
+    href="/developer/app/refresh/{{app_id}}?redirect_uri={{redirecturl}}"
+    title="{{_ 'OAuth Test'}}"
+>
+    <i class="fa fa-retweet"></i>
+</a>
+&nbsp;
+<a
+    class="text-grey"
+    href="/developer/app/update/{{app_id}}?redirect_uri={{redirecturl}}"
+    title="{{_ 'Edit %s' ../schema.singular}}"
+>
+    <i class="fa fa-edit"></i>
+</a>
+&nbsp;
+<a
+    class="text-danger remove"
+    href="/developer/app/remove/{{app_id}}?redirect_uri={{redirecturl}}"
+    title="{{_ 'Remove %s' ../schema.singular}}"
+>
+    <i class="fa fa-times"></i>
+</a>

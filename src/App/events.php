@@ -1,186 +1,180 @@
 <?php //-->
 /**
- * This file is part of Cradle API Package.
- * (c) 2018 Sterling Technologies.
+ * This file is part of a package designed for the CradlePHP Project.
  *
  * Copyright and license information can be found at LICENSE.txt
  * distributed with this package.
  */
 
 use Cradle\Package\System\Schema;
-use Cradle\Package\System\Exception;
-
-use Cradle\Http\Request;
-use Cradle\Http\Response;
-
- use Cradle\Package\Api\Webhook\Validator;
 
 /**
- * Creates an App
+ * System Model Create Job
  *
  * @param Request $request
  * @param Response $response
  */
-$this->on('app-create', function ($request, $response) {
-    //do a custom validation if there's a webhook
-    //just few validations because we still have the
-    //default validation of system model
-    $errors = Validator::getWebhookErrors($request->getStage());
-
-    //if there are errors
-    if (!empty($errors)) {
-        return $response
-            ->setError(true, implode(',', array_values($errors)))
-            ->set('json', 'validation', $errors);
+$this->on('system-model-create', function ($request, $response) {
+    //this is only for the app schema
+    if ($request->getStage('schema') !== 'app') {
+        return;
     }
 
-    //trigger model create
-    $this->trigger('webhook-create', $request, $response);
-
-    if (!$response->isError()) {
-        $request->setStage('webhook_id', $response->getResults('webhook_id'));
+    //if there's already an error
+    if ($response->isError()) {
+        //theres nothing to do then
+        return;
     }
 
-    //set app as schema
-    $request->setStage('schema', 'app');
+    //----------------------------//
+    // 1. Get Data
+    //precurse, we need the ID
+    $appId = $response->getResults('app_id');
+    $scopes = $response->getResults('scope');
+    $webhooks = $response->getResults('webhook');
 
-    //trigger model create
-    $this->trigger('system-model-create', $request, $response);
+    //----------------------------//
+    // 2. Process Data
+    //this/these will be used a lot
+    $schema = Schema::i('app');
+    $sql = $schema->model()->service('sql');
+    $elastic = $schema->model()->service('elastic');
+
+    //we need to link the scopes
+    if (is_array($scopes)) {
+        foreach($scopes as $scopeId => $enabled) {
+            if($enabled) {
+                $sql->link('scope', $appId, $scopeId);
+                continue;
+            }
+
+            $sql->unlink('scope', $appId, $scopeId);
+        }
+    }
+
+    //we need to link the webhooks
+    if (is_array($webhooks)) {
+        foreach($webhooks as $webhookId => $enabled) {
+            if($enabled) {
+                $sql->link('webhook', $appId, $webhookId);
+                continue;
+            }
+
+            $sql->unlink('webhook', $appId, $webhookId);
+        }
+    }
+
+    $elastic->update($appId);
 });
 
 /**
- * Gets the App
+ * System Model Update Job
  *
  * @param Request $request
  * @param Response $response
  */
-$this->on('app-detail', function ($request, $response) {
-    //set app as schema
-    $request->setStage('schema', 'app');
-
-    //trigger model detail
-    $this->trigger('system-model-detail', $request, $response);
-});
-
-/**
- * Removes an App
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('app-remove', function ($request, $response) {
-    $app = [];
-
-    //set app as schema
-    $request->setStage('schema', 'app');
-
-    //trigger model detail
-    $this->trigger('system-model-detail', $request, $response);
-    if (!$response->isError()) {
-        $app = $response->getResults();
+$this->on('system-model-update', function ($request, $response) {
+    //this is only for the app schema
+    if ($request->getStage('schema') !== 'app') {
+        return;
     }
 
-    //trigger model remove
-    $this->trigger('system-model-remove', $request, $response);
-    $results = $response->getResults();
-
-    // we have to remove webhook also
-    if ($app) {
-        //set webhook as schema
-        $request->setStage('schema', 'webhook');
-        //set webhook id
-        $request->setStage('webhook_id', $app['webhook_id']);
-        //trigger model remove
-        $this->trigger('system-model-remove', $request, $response);
-
-        $response->setResults($results);
-    }
-});
-
-/**
- * Restores an App
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('app-restore', function ($request, $response) {
-    $app = [];
-
-    //set app as schema
-    $request->setStage('schema', 'app');
-
-    //trigger model detail
-    $this->trigger('system-model-detail', $request, $response);
-    if (!$response->isError()) {
-        $app = $response->getResults();
+    //if there's already an error
+    if ($response->isError()) {
+        //theres nothing to do then
+        return;
     }
 
-    //trigger model restore
-    $this->trigger('system-model-restore', $request, $response);
-    $results = $response->getResults();
+    //so a good use case is when another controller
+    //is calling for update like app refresh
+    //we should consider other methods calling events
 
-    // we have to restore webhook also
-    if ($app) {
-        //set webhook as schema
-        $request->setStage('schema', 'webhook');
-        //set webhook id
-        $request->setStage('webhook_id', $app['webhook_id']);
-        //trigger model restore
-        $this->trigger('system-model-restore', $request, $response);
-
-        $response->setResults($results);
-    }
-});
-
-/**
- * Searches an App
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('app-search', function ($request, $response) {
-    //set app as schema
-    $request->setStage('schema', 'app');
-
-    //trigger model search
-    $this->trigger('system-model-search', $request, $response);
-});
-
-/**
- * Updates an App
- *
- * @param Request $request
- * @param Response $response
- */
-$this->on('app-update', function ($request, $response) {
-    //do a custom validation if there's a webhook
-    //just few validations because we still have the
-    //default validation of system model
-    $errors = Validator::getWebhookErrors($request->getStage());
-
-    //if there are errors
-    if (!empty($errors)) {
-        return $response
-            ->setError(true, implode(',', array_values($errors)))
-            ->set('json', 'validation', $errors);
+    //if there are no updates to scopes or webhooks
+    if (!$response->hasResults('scope')
+        && !$response->hasResults('webhook')
+    ) {
+        return;
     }
 
-    //set app as schema
-    $request->setStage('schema', 'app');
+    //----------------------------//
+    // 1. Get Data
+    $appId = $response->getResults('app_id');
 
-    $this->trigger('system-model-detail', $request, $response);
-    $app = $response->getResults();
+    //get the detail (for the existing scopes and hooks)
+    $payload = $this->makePayload();
 
-    $webhookRequest = new Request();
-    $webhookResponse =  new Response();
+    $payload['request']
+        ->setStage('schema', 'app')
+        ->setStage('app_id', $appId);
 
-    $webhookRequest->setStage($request->getStage());
-    $webhookRequest->setServer($request->getServer());
-    $webhookRequest->setStage('webhook_id', $app['webhook_id']);
+    $this->trigger(
+        'system-model-detail',
+        $payload['request'],
+        $payload['response']
+    );
 
-    // //trigger model create
-    $this->trigger('webhook-update', $webhookRequest, $webhookResponse);
+    $current = $payload['response']->getResults();
 
-    //trigger model update
-    $this->trigger('system-model-update', $request, $response);
+    //----------------------------//
+    // 2. Process Data
+    //this/these will be used a lot
+    $schema = Schema::i('app');
+    $sql = $schema->model()->service('sql');
+    $elastic = $schema->model()->service('elastic');
+
+    if ($response->hasResults('scope')) {
+        //organize the scopes
+        $exists = [];
+        foreach($current['scope'] as $scope) {
+            $exists[$scope['scope_id']] = true;
+        }
+
+        $scopes = $response->getResults('scope');
+
+        //we need to link the scopes
+        if (is_array($scopes)) {
+            foreach($scopes as $scopeId => $enabled) {
+                //if it's enabled
+                if($enabled) {
+                    //if not already linked
+                    if (!isset($exists[$scopeId])) {
+                        $sql->link('scope', $appId, $scopeId);
+                    }
+
+                    continue;
+                }
+
+                $sql->unlink('scope', $appId, $scopeId);
+            }
+        }
+    }
+
+    if ($response->hasResults('webhook')) {
+        //organize the hooks
+        $exists = [];
+        foreach($current['webhook'] as $scope) {
+            $exists[$scope['webhook_id']] = true;
+        }
+
+        $webhooks = $response->getResults('webhook');
+
+        //we need to link the webhooks
+        if (is_array($webhooks)) {
+            foreach($webhooks as $webhookId => $enabled) {
+                //if it's enabled
+                if($enabled) {
+                    //if not already linked
+                    if (!isset($exists[$webhookId])) {
+                        $sql->link('webhook', $appId, $webhookId);
+                    }
+
+                    continue;
+                }
+
+                $sql->unlink('webhook', $appId, $webhookId);
+            }
+        }
+    }
+
+    $elastic->update($appId);
 });

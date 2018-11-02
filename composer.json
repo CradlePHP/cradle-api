@@ -21,6 +21,10 @@
         {
             "name": "April Sacil",
             "email": "aprilvsacil@gmail.com"
+        },
+        {
+            "name": "Christian Blanquera",
+            "email": "cblanquera@sterlingtech.ph"
         }
     ],
     "autoload": {

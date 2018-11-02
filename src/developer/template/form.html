@@ -1,33 +1,10 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="/admin">
-                <i class="fas fa-home"></i> {{_ 'Admin'}}
+            <a href="/developer/app/search">
+                <i class="fas fa-{{schema.icon}}"></i> {{schema.plural}}
             </a>
         </li>
-        {{#if relation.suggestion}}
-            <li class="breadcrumb-item">
-                <a href="/admin/system/model/{{relation.schema.name}}/search">
-                    <i class="{{relation.schema.icon}}"></i> {{relation.schema.plural}}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/admin/system/model/{{relation.schema.name}}/update/{{scope relation.data relation.schema.primary}}">
-                    {{relation.suggestion}}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/admin/system/model/{{schema.name}}/search/{{relation.schema.name}}/{{scope relation.data relation.schema.primary}}">
-                    <i class="fas fa-{{schema.icon}}"></i> {{schema.plural}}
-                </a>
-            </li>
-        {{else}}
-            <li class="breadcrumb-item">
-                <a href="/admin/system/model/{{schema.name}}/search">
-                    <i class="fas fa-{{schema.icon}}"></i> {{schema.plural}}
-                </a>
-            </li>
-        {{/if}}
         <li class="breadcrumb-item active" aria-current="page">
             {{#when action '===' 'create'}}
                 <i class="fas fa-plus"></i> {{title}}
@@ -38,14 +15,7 @@
     </ol>
 </nav>
 
-<div class="main-padding">
-    {{#if relation.suggestion}}
-        <h3 class="main-title">
-            <i class="{{relation.schema.icon}}"></i>
-            {{relation.suggestion}}
-        </h3>
-    {{/if}}
-
+<div class="main-padding mt-4">
     <form
         class="box"
         method="post"
@@ -75,41 +45,43 @@
 
         <div class="box-body box-padding">
             {{#relations schema.name 1}}
-                <div class="form-group{{#has ../errors primary2}} has-error{{/has}}">
-                    <label class="control-label">{{singular}}</label>
-                    <div>
-                        <input
-                            autocomplete="off"
-                            class="form-control suggestion-label-{{name}}"
-                            name="{{suggestion_name}}"
-                            placeholder="{{_ 'Enter %s' singular}}"
-                            type="text"
-                            value="{{scope ../item suggestion_name}}"
-                        />
-                        <input
-                            class="suggestion-value-{{name}}"
-                            name="{{primary2}}"
-                            type="hidden"
-                            value="{{scope ../item primary2}}"
-                        />
-                        <div
-                            class="input-suggestion d-none"
-                            data-do="suggestion-field"
-                            data-format="{{suggestion}}"
-                            data-target-label="input.suggestion-label-{{name}}"
-                            data-target-value="input.suggestion-value-{{name}}"
-                            {{#in ../valid_relations name}}
-                                data-url="/admin/system/model/{{name}}/search?q={QUERY}&render=false"
-                            {{else}}
-                                data-url="/admin/{{name}}/search?q={QUERY}&render=false"
-                            {{/in}}
-                            data-value="{{primary2}}"
-                        ></div>
-                        {{#has ../errors primary2}}
-                            <span class="help-text">{{scope ../errors primary2}}</span>
-                        {{/has}}
+                {{#otherwise name '===' 'profile'}}
+                    <div class="form-group{{#has ../errors primary2}} has-error{{/has}}">
+                        <label class="control-label">{{singular}}</label>
+                        <div>
+                            <input
+                                autocomplete="off"
+                                class="form-control suggestion-label-{{name}}"
+                                name="{{suggestion_name}}"
+                                placeholder="{{_ 'Enter %s' singular}}"
+                                type="text"
+                                value="{{scope ../item suggestion_name}}"
+                            />
+                            <input
+                                class="suggestion-value-{{name}}"
+                                name="{{primary2}}"
+                                type="hidden"
+                                value="{{scope ../item primary2}}"
+                            />
+                            <div
+                                class="input-suggestion d-none"
+                                data-do="suggestion-field"
+                                data-format="{{suggestion}}"
+                                data-target-label="input.suggestion-label-{{name}}"
+                                data-target-value="input.suggestion-value-{{name}}"
+                                {{#in ../valid_relations name}}
+                                    data-url="/admin/system/model/{{name}}/search?q={QUERY}&render=false"
+                                {{else}}
+                                    data-url="/admin/{{name}}/search?q={QUERY}&render=false"
+                                {{/in}}
+                                data-value="{{primary2}}"
+                            ></div>
+                            {{#has ../errors primary2}}
+                                <span class="help-text">{{scope ../errors primary2}}</span>
+                            {{/has}}
+                        </div>
                     </div>
-                </div>
+                {{/otherwise}}
             {{/relations}}
 
             {{#relations schema.name 0}}
