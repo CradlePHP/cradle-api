@@ -1,5 +1,6 @@
 <?php //-->
 return [
+    'disable' => '1',
     'singular' => 'Application',
     'plural' => 'Applications',
     'name' => 'app',
@@ -7,6 +8,7 @@ return [
     'detail' => 'Manages Applications',
     'fields' => [
         [
+            'disable' => '1',
             'label' => 'Title',
             'name' => 'title',
             'field' => [
@@ -28,6 +30,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Domain',
             'name' => 'domain',
             'field' => [
@@ -52,6 +55,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Website',
             'name' => 'website',
             'field' => [
@@ -71,6 +75,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Webhook URL',
             'name' => 'webhook',
             'field' => [
@@ -85,6 +90,7 @@ return [
             'default' => ''
         ],
         [
+            'disable' => '1',
             'label' => 'Token',
             'name' => 'token',
             'field' => [
@@ -101,6 +107,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Secret',
             'name' => 'secret',
             'field' => [
@@ -117,6 +124,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Active',
             'name' => 'active',
             'field' => [
@@ -132,6 +140,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Created',
             'name' => 'created',
             'field' => [
@@ -147,6 +156,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Updated',
             'name' => 'updated',
             'field' => [

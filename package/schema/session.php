@@ -1,5 +1,6 @@
 <?php //-->
 return [
+    'disable' => '1',
     'singular' => 'Session',
     'plural' => 'Sessions',
     'name' => 'session',
@@ -7,6 +8,7 @@ return [
     'detail' => 'Manages 3-legged application sessions',
     'fields' => [
         [
+            'disable' => '1',
             'label' => 'Token',
             'name' => 'token',
             'field' => [
@@ -23,6 +25,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Secret',
             'name' => 'secret',
             'field' => [
@@ -39,6 +42,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Status',
             'name' => 'status',
             'field' => [
@@ -75,6 +79,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Active',
             'name' => 'active',
             'field' => [
@@ -90,6 +95,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Created',
             'name' => 'created',
             'field' => [
@@ -105,6 +111,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Updated',
             'name' => 'updated',
             'field' => [

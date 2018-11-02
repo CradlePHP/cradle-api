@@ -1,5 +1,6 @@
 <?php //-->
 return [
+    'disable' => '1',
     'singular' => 'Webhook',
     'plural' => 'Webhooks',
     'name' => 'webhook',
@@ -7,6 +8,7 @@ return [
     'detail' => 'Manages Webhooks for applications registered on the system',
     'fields' => [
         [
+            'disable' => '1',
             'label' => 'Title',
             'name' => 'title',
             'field' => [
@@ -28,6 +30,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Type',
             'name' => 'type',
             'field' => [
@@ -65,6 +68,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Detail',
             'name' => 'detail',
             'field' => [
@@ -86,6 +90,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Event Name',
             'name' => 'event',
             'field' => [
@@ -110,6 +115,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Parameters',
             'name' => 'parameters',
             'field' => [
@@ -124,6 +130,7 @@ return [
             'default' => ''
         ],
         [
+            'disable' => '1',
             'label' => 'Method',
             'name' => 'method',
             'field' => [
@@ -169,6 +176,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Action',
             'name' => 'action',
             'field' => [
@@ -193,6 +201,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Sample Response',
             'name' => 'sample_response',
             'field' => [
@@ -210,6 +219,7 @@ return [
             'default' => '',
         ],
         [
+            'disable' => '1',
             'label' => 'Active',
             'name' => 'active',
             'field' => [
@@ -225,6 +235,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Created',
             'name' => 'created',
             'field' => [
@@ -240,6 +251,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Updated',
             'name' => 'updated',
             'field' => [

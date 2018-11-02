@@ -1,5 +1,6 @@
 <?php //-->
 return [
+    'disable' => '1',
     'singular' => 'Scope',
     'plural' => 'Scopes',
     'name' => 'scope',
@@ -7,6 +8,7 @@ return [
     'detail' => 'Groups API REST calls and Webhooks in order to swap in and out on the fly with out the developer necessarily updating their app. This is also useful for API versioning.',
     'fields' => [
         [
+            'disable' => '1',
             'label' => 'Name',
             'name' => 'name',
             'field' => [
@@ -28,6 +30,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Slug',
             'name' => 'slug',
             'field' => [
@@ -58,6 +61,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Type',
             'name' => 'type',
             'field' => [
@@ -93,6 +97,7 @@ return [
             'filterable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Detail',
             'name' => 'detail',
             'field' => [
@@ -112,6 +117,7 @@ return [
             'searchable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Special Approval',
             'name' => 'special_approval',
             'field' => [
@@ -140,6 +146,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Active',
             'name' => 'active',
             'field' => [
@@ -155,6 +162,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Created',
             'name' => 'created',
             'field' => [
@@ -170,6 +178,7 @@ return [
             'sortable' => '1'
         ],
         [
+            'disable' => '1',
             'label' => 'Updated',
             'name' => 'updated',
             'field' => [

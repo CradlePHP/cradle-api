@@ -24,20 +24,25 @@ cradle(function() {
 
         //NOTE: Special way to redo the entire package setup
         //in this version there are major database changes
-        //setup a new RnR
-        $payload = $this->makePayload();
+        $schemaPath = $this->package('global')->path('schema');
+        if (file_exists($schemaPath . '/' . $file)) {
+            //setup a new RnR
+            $payload = $this->makePayload();
+            //set the data
+            $payload['request']->setStage('schema', $data['name']);
+            //this will permanently remove the file and table
+            $payload['request']->setStage('mode', 'permanent');
 
-        //set the data
-        $payload['request']->setStage('schema', $data['name']);
-        //this will permanently remove the file and table
-        $payload['request']->setStage('mode', 'permanent');
+            //remove the schema
+            $this->trigger(
+                'system-schema-remove',
+                $payload['request'],
+                $payload['response']
+            );
 
-        //remove the schema
-        $this->trigger(
-            'system-schema-remove',
-            $payload['request'],
-            $payload['response']
-        );
+            //clear cache
+            $this->package('global')->schema($data['name'], false);
+        }
 
         //setup a new RnR
         $payload = $this->makePayload();
