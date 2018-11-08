@@ -143,10 +143,13 @@ $this->get('/admin/system/model/app/refresh/:app_id', function ($request, $respo
         $this->log(
             sprintf(
                 'refreshed App #%s',
-                $request->getStage('id')
+                $request->getStage('app_id')
             ),
             $request,
-            $response
+            $response,
+            'update',
+            'app',
+            $request->getStage('app_id')
         );
     }
 
