@@ -174,14 +174,17 @@ return [
     ],
     'relations' => [
         [
+            'disable' => 1,
             'many' => '1',
             'name' => 'profile'
         ],
         [
+            'disable' => 1,
             'many' => '2',
             'name' => 'scope'
         ],
         [
+            'disable' => 1,
             'many' => '2',
             'name' => 'webhook'
         ]

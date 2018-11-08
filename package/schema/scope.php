@@ -196,6 +196,7 @@ return [
     ],
     'relations' => [
         [
+            'disable' => 1,
             'many' => '2',
             'name' => 'rest'
         ]
