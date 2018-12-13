@@ -168,21 +168,13 @@
                 </div>
             {{/relations}}
 
-            {{#each schema.fields}}
-                {{#when name '!==' 'webhook'}}
-                    {{#notin 'none,hide,active,created,updated,uuid' field.type}}
-                        <div class="form-group{{#has ../errors @key}} has-error{{/has}}">
-                            <label class="control-label">{{label}}</label>
-                            <div class="form-{{field.type}}">
-                                {{> form_fields}}
-                                {{#has ../errors @key}}
-                                    <span class="help-text">{{scope ../errors @key}}</span>
-                                {{/has}}
-                            </div>
-                        </div>
-                    {{/notin}}
-                {{/when}}
-            {{/each}}
+            {{#format 'field' schema.name this}}
+                {{#each formats}}
+                    {{#when @key '!==' 'app_webhook'}}
+                        {{> form_set}}
+                    {{/when}}
+                {{/each}}
+            {{/format}}
 
             {{#request 'partial' 'scopes'}}
                 {{#if rows.length}}

@@ -244,27 +244,29 @@ $cradle->on('rest-route-search', function ($request, $response) {
         $ids[] = $scope['scope_id'];
     }
 
-    $rows = Schema::i('rest')
-        ->model()
-        ->service('sql')
-        ->getResource()
-        ->search('rest')
-        ->innerJoinUsing('scope_rest', 'rest_id')
-        ->addFilter('scope_id IN ('.implode(',', $ids).')')
-        ->getRows();
+    if (!empty($ids)) {
+        $rows = Schema::i('rest')
+            ->model()
+            ->service('sql')
+            ->getResource()
+            ->search('rest')
+            ->innerJoinUsing('scope_rest', 'rest_id')
+            ->addFilter('scope_id IN ('.implode(',', $ids).')')
+            ->getRows();
 
-    //add it to results
-    foreach ($rows as $row) {
-        $row['rest_parameters'] = json_decode(
-            $row['rest_parameters'],
-            true
-        );
+        //add it to results
+        foreach ($rows as $row) {
+            $row['rest_parameters'] = json_decode(
+                $row['rest_parameters'],
+                true
+            );
 
-        if (!is_array($row['rest_parameters'])) {
-            $row['rest_parameters'] = [];
+            if (!is_array($row['rest_parameters'])) {
+                $row['rest_parameters'] = [];
+            }
+
+            $results[$row['rest_id']] = $row;
         }
-
-        $results[$row['rest_id']] = $row;
     }
 
     $response->setResults([
