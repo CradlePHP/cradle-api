@@ -94,67 +94,6 @@ cradle(function() {
         $processed[] = $data['name'];
     }
 
-    if ($this->isPackage('cradlephp/cradle-role')) {
-        $payload = $this->makePayload();
-        $payload['request']
-            ->setStage('schema', 'role')
-            ->setStage('role_slug', 'developer');
-
-        $this->trigger(
-            'system-model-detail',
-            $payload['request'],
-            $payload['response']
-        );
-
-        if (!$payload['response']->isError()
-            && $payload['response']->hasResults('role_admin_menu')
-        ) {
-            $id = $payload['response']->getResults('role_id');
-            $menu = $payload['response']->getResults('role_admin_menu');
-
-            $menu[] = [
-                'icon' => 'fas fa-code',
-                'path' => '#menu-api',
-                'label' => 'API',
-                'children' => [
-                    [
-                        'icon' => 'fas fa-mobile-alt',
-                        'path' => '/admin/system/model/app/search',
-                        'label' => 'Applications'
-                    ],
-                    [
-                        'icon' => 'fas fa-address-card',
-                        'path' => '/admin/system/model/session/search',
-                        'label' => 'Sessions'
-                    ],
-                    [
-                        'icon' => 'fas fa-phone',
-                        'path' => '/admin/system/model/rest/search',
-                        'label' => 'REST Calls'
-                    ],
-                    [
-                        'icon' => 'fas fa-comments',
-                        'path' => '/admin/system/model/webhook/search',
-                        'label' => 'Webhooks'
-                    ]
-                ]
-            ];
-
-            $payload['request']
-                ->setStage('role_id', $id)
-                ->setStage(
-                    'role_admin_menu',
-                    json_encode($menu, JSON_PRETTY_PRINT)
-                );
-
-            $this->trigger(
-                'system-model-update',
-                $payload['request'],
-                $payload['response']
-            );
-        }
-    }
-
     if (!empty($errors)) {
         $this->getResponse()->set('json', 'validation', $errors);
     }
