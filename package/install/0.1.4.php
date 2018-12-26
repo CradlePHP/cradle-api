@@ -1,9 +1,6 @@
 <?php //-->
 
 cradle(function() {
-    //setup a new RnR
-    $payload = $this->makePayload();
-
     //setup result counters
     $errors = [];
     $processed = [];
@@ -24,6 +21,9 @@ cradle(function() {
             //skip
             continue;
         }
+
+        //setup a new RnR
+        $payload = $this->makePayload();
 
         //set the data
         $payload['request']->setStage($data);
