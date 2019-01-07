@@ -627,6 +627,11 @@ $this->on('cradlephp-cradle-api-sql-populate', function ($request, $response) {
                                     'label' => 'Sessions'
                                 ],
                                 [
+                                    'icon' => 'fas fa-crosshairs',
+                                    'path' => '/admin/system/model/scope/search',
+                                    'label' => 'Scopes'
+                                ],
+                                [
                                     'icon' => 'fas fa-phone',
                                     'path' => '/admin/system/model/rest/search',
                                     'label' => 'REST Calls'

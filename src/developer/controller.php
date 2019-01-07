@@ -9,6 +9,17 @@
 use Cradle\Package\System\Schema;
 
 /**
+ * Render Admin CSS
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/styles/developer.css', function ($request, $response) {
+    $response->addHeader('Content-Type', 'text/css');
+    $response->setContent(file_get_contents(__DIR__ . '/developer.css'));
+});
+
+/**
  * Render the REST Documentaion Page
  *
  * @param Request $request
