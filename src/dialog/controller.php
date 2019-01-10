@@ -91,13 +91,15 @@ $this->get('/dialog/request', function ($request, $response) {
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'request',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'request',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
@@ -218,13 +220,15 @@ $this->get('/dialog/invalid', function ($request, $response) {
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'invalid',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'invalid',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response

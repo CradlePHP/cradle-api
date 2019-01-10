@@ -63,13 +63,15 @@ $this->get('/developer/docs/calls', function ($request, $response) {
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'docs/calls',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'docs/calls',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
@@ -131,13 +133,15 @@ $this->get('/developer/docs/calls/:rest_id', function ($request, $response) {
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'docs/call',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'docs/call',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
@@ -198,13 +202,15 @@ $this->get('/developer/docs/scopes', function ($request, $response) {
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'docs/scopes',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'docs/scopes',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
@@ -266,13 +272,15 @@ $this->get('/developer/docs/scopes/:scope_slug', function ($request, $response) 
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'docs/scope',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'docs/scope',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
@@ -333,13 +341,15 @@ $this->get('/developer/docs/webhooks', function ($request, $response) {
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'docs/webhooks',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'docs/webhooks',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
@@ -401,13 +411,15 @@ $this->get('/developer/docs/webhooks/:webhook_id', function ($request, $response
         $partials = $response->getPage('partials_root');
     }
 
-    $body = cradle('cradlephp/cradle-system')->template(
-        'docs/webhook',
-        $data,
-        [],
-        $template,
-        $partials
-    );
+    $body = $this
+        ->package('cradlephp/cradle-system')
+        ->template(
+            'docs/webhook',
+            $data,
+            [],
+            $template,
+            $partials
+        );
 
     //Set Content
     $response
