@@ -32,10 +32,7 @@ $cradle->on('webhook-valid-search', function ($request, $response) {
     try {
         //try to only get the webhooks that are being
         //listened to and have valid webhook URLS
-        $rows = Schema::i('webhook')
-            ->model()
-            ->service('sql')
-            ->getResource()
+        $rows = $resource
             ->search('app_webhook')
             ->innerJoinUsing('app', 'app_id')
             ->innerJoinUsing('webhook', 'webhook_id')
