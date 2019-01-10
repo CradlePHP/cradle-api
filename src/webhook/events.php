@@ -8,6 +8,7 @@
 
 use Cradle\Package\System\Schema;
 use Cradle\Curl\CurlHandler;
+use Cradle\Storm\SqlException;
 
 /**
  * Gets all the rest calls given the source scopes
@@ -18,20 +19,37 @@ use Cradle\Curl\CurlHandler;
 $cradle->on('webhook-valid-search', function ($request, $response) {
     $results = [];
 
-    //only get the webhooks that are being
-    //listened to and have valid webhook URLS
-    $rows = Schema::i('webhook')
+    $resource = Schema::i('webhook')
         ->model()
         ->service('sql')
-        ->getResource()
-        ->search('app_webhook')
-        ->innerJoinUsing('app', 'app_id')
-        ->innerJoinUsing('webhook', 'webhook_id')
-        ->innerJoinUsing('app_profile', 'app_id')
-        ->addFilter('app_webhook IS NOT NULL AND app_webhook !=\'\'')
-        ->filterByAppActive(1)
-        ->filterByWebhookActive(1)
-        ->getRows();
+        ->getResource();
+
+    //if there is no resource found
+    if (!$resource) {
+        return $response->setResults(['rows' => [], 'total' => 0]);
+    }
+
+    try {
+        //try to only get the webhooks that are being
+        //listened to and have valid webhook URLS
+        $rows = Schema::i('webhook')
+            ->model()
+            ->service('sql')
+            ->getResource()
+            ->search('app_webhook')
+            ->innerJoinUsing('app', 'app_id')
+            ->innerJoinUsing('webhook', 'webhook_id')
+            ->innerJoinUsing('app_profile', 'app_id')
+            ->addFilter('app_webhook IS NOT NULL AND app_webhook !=\'\'')
+            ->filterByAppActive(1)
+            ->filterByWebhookActive(1)
+            ->getRows();
+    //if there's an SQL error, then ignore
+    } catch (SqlException $e) {
+        return $response->setResults(['rows' => [], 'total' => 0]);
+    }
+
+
 
     foreach ($rows as $row) {
         $row['webhook_parameters'] = json_decode(

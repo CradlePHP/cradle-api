@@ -41,6 +41,11 @@ return function($request, $response) {
 
     $webhooks = $payload['response']->getResults('rows');
 
+    //if no webhooks no need to continue
+    if (empty($webhooks)) {
+        return;
+    }
+
     //need to create a special in_array for multidimensional arrays
     $in = function($list1, $list2) use (&$in) {
         foreach ($list1 as $key => $value) {
