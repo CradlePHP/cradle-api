@@ -42,7 +42,7 @@ $this->get('/developer/docs/calls', function ($request, $response) {
     //if there's an error
     if ($response->isError()) {
         $this->package('global')->flash($response->getMessage(), 'error');
-        $this->package('global')->redirect($redirect);
+        return $this->package('global')->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -111,7 +111,7 @@ $this->get('/developer/docs/calls/:rest_id', function ($request, $response) {
     //if there's an error
     if ($response->isError()) {
         $this->package('global')->flash($response->getMessage(), 'error');
-        $this->package('global')->redirect($redirect);
+        return $this->package('global')->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -181,7 +181,7 @@ $this->get('/developer/docs/scopes', function ($request, $response) {
     //if there's an error
     if ($response->isError()) {
         $this->package('global')->flash($response->getMessage(), 'error');
-        $this->package('global')->redirect($redirect);
+        return $this->package('global')->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -250,7 +250,7 @@ $this->get('/developer/docs/scopes/:scope_slug', function ($request, $response) 
     //if there's an error
     if ($response->isError()) {
         $this->package('global')->flash($response->getMessage(), 'error');
-        $this->package('global')->redirect($redirect);
+        return $this->package('global')->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -320,7 +320,7 @@ $this->get('/developer/docs/webhooks', function ($request, $response) {
     //if there's an error
     if ($response->isError()) {
         $this->package('global')->flash($response->getMessage(), 'error');
-        $this->package('global')->redirect($redirect);
+        return $this->package('global')->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -389,7 +389,7 @@ $this->get('/developer/docs/webhooks/:webhook_id', function ($request, $response
     //if there's an error
     if ($response->isError()) {
         $this->package('global')->flash($response->getMessage(), 'error');
-        $this->package('global')->redirect($redirect);
+        return $this->package('global')->redirect($redirect);
     }
 
     $data = $response->getResults();

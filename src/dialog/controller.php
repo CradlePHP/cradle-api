@@ -141,7 +141,7 @@ $this->post('/dialog/request', function ($request, $response) {
     if ($request->getStage('action') !== 'allow') {
         //redirect
         $url = $request->getStage('redirect_uri');
-        $this->getDispatcher()->redirect($url . '?error=deny');
+        return $this->package('global')->redirect($url . '?error=deny');
     }
 
     //get the profile
@@ -190,7 +190,7 @@ $this->post('/dialog/request', function ($request, $response) {
     //redirect
     $url = $request->getStage('redirect_uri');
     $code = $response->getResults('session_token');
-    $this->getDispatcher()->redirect($url . '?code=' . $code);
+    $this->package('global')->redirect($url . '?code=' . $code);
 });
 
 /**
