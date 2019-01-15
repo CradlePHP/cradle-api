@@ -58,4 +58,4 @@ $this->on('system-model-create', function ($request, $response) {
     }
 
     $elastic->update($sessionId);
-});
+}, -10);

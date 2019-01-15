@@ -65,7 +65,7 @@ $this->on('system-model-create', function ($request, $response) {
     }
 
     $elastic->update($appId);
-});
+}, -10);
 
 /**
  * System Model Update Job
@@ -177,4 +177,4 @@ $this->on('system-model-update', function ($request, $response) {
     }
 
     $elastic->update($appId);
-});
+}, -10);

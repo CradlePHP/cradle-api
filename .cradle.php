@@ -9,16 +9,16 @@
 
 require_once __DIR__ . '/package/events.php';
 require_once __DIR__ . '/package/helpers.php';
-require_once __DIR__ . '/src/app/controller.php';
 require_once __DIR__ . '/src/app/events.php';
+require_once __DIR__ . '/src/app/controller.php';
 require_once __DIR__ . '/src/dialog/events.php';
-require_once __DIR__ . '/src/rest/controller.php';
+require_once __DIR__ . '/src/dialog/controller.php';
 require_once __DIR__ . '/src/rest/events.php';
+require_once __DIR__ . '/src/rest/controller.php';
+require_once __DIR__ . '/src/developer/controller.php';
 require_once __DIR__ . '/src/webhook/events.php';
-require_once __DIR__ . '/src/developer/events.php';
 
 //bootstrap
 $this
-    ->preprocess(include __DIR__ . '/src/bootstrap/controller.php')
     ->preprocess(include __DIR__ . '/src/bootstrap/rest.php')
     ->preprocess(include __DIR__ . '/src/bootstrap/webhooks.php');
