@@ -69,7 +69,7 @@ $this->get('/admin/system/model/app/create', function ($request, $response) {
     if (!$response->hasPage('partials_root')) {
         $response->setPage('partials_root', __DIR__ . '/template');
     }
-});
+}, 10);
 
 /**
  * Render App Create Page
@@ -116,7 +116,7 @@ $this->get('/admin/system/model/app/update/:app_id', function ($request, $respon
     if (!$response->hasPage('partials_root')) {
         $response->setPage('partials_root', __DIR__ . '/template');
     }
-});
+}, 10);
 
 /**
  * Process App Refresh
