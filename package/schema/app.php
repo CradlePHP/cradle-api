@@ -4,6 +4,7 @@ return [
     'singular' => 'Application',
     'plural' => 'Applications',
     'name' => 'app',
+    'group' => 'API',
     'icon' => 'fas fa-mobile-alt',
     'detail' => 'Manages Applications',
     'fields' => [
