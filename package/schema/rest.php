@@ -4,6 +4,7 @@ return [
     'singular' => 'REST Call',
     'plural' => 'REST Calls',
     'name' => 'rest',
+    'group' => 'API',
     'icon' => 'fas fa-flask',
     'detail' => 'Manages REST calls for applications registered on the system',
     'fields' => [

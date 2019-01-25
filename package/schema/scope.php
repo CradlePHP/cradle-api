@@ -4,6 +4,7 @@ return [
     'singular' => 'Scope',
     'plural' => 'Scopes',
     'name' => 'scope',
+    'group' => 'API',
     'icon' => 'fas fa-crosshairs',
     'detail' => 'Groups API REST calls and Webhooks in order to swap in and out on the fly with out the developer necessarily updating their app. This is also useful for API versioning.',
     'fields' => [

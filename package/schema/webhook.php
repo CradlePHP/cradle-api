@@ -4,6 +4,7 @@ return [
     'singular' => 'Webhook',
     'plural' => 'Webhooks',
     'name' => 'webhook',
+    'group' => 'API',
     'icon' => 'fas fa-comments',
     'detail' => 'Manages Webhooks for applications registered on the system',
     'fields' => [

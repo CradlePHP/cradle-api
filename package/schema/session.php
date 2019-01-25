@@ -4,6 +4,7 @@ return [
     'singular' => 'Session',
     'plural' => 'Sessions',
     'name' => 'session',
+    'group' => 'API',
     'icon' => 'fas fa-id-card',
     'detail' => 'Manages 3-legged application sessions',
     'fields' => [
