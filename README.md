@@ -66,7 +66,7 @@ This will redirect you to `/dialog/request?client_id=94341e9d0776b73cc7142cc161f
 When your done that it will return you back to the same screen with the same URL except with a code parameter. (ie. `/developer/app/search?code=1234567890`). If you have POST MAN you can call `POST /rest/access?client_id=[your app key]&client_secret=[your app secret]&code=[the code you got earlier]`. That will return session tokens in JSON as in the following.
 
 ```
-POST /rest/access?client_id= 94341e9d0776b73cc7142cc161faf0e688fdbfb2&client_secret= d490f575cd1c48e1b970bb0427ae4ec2b2636403&code= b75272cbf7edbb7a434f77e904a27beb4fe08be7
+POST /rest/access?client_id=94341e9d0776b73cc7142cc161faf0e688fdbfb2&client_secret=d490f575cd1c48e1b970bb0427ae4ec2b2636403&code=b75272cbf7edbb7a434f77e904a27beb4fe08be7
 
 {
     "error": false,
