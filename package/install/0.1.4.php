@@ -2,8 +2,20 @@
 
 cradle(function() {
     //setup result counters
-    $errors = [];
+    $response = $this->getResponse();
+    $logs = [];
     $processed = [];
+
+    //if there was an error
+    if ($response->isError()) {
+        $logs[] = [
+            'type' => 'error',
+            'message' => 'Error from the previous version. Skipping...'
+        ];
+
+        $response->setResults('logs', 'cradlephp/cradle-api', '0.1.4', $logs);
+        return;
+    }
 
     //scan through each file
     foreach (scandir(__DIR__ . '/../schema') as $file) {
@@ -24,7 +36,6 @@ cradle(function() {
 
         //setup a new RnR
         $payload = $this->makePayload();
-
         //set the data
         $payload['request']->setStage($data);
 
@@ -51,6 +62,11 @@ cradle(function() {
             $payload['request']->setStage('validation', []);
         }
 
+        $logs[] = [
+            'type' => 'info',
+            'message' => sprintf('Updating %s schema', $data['name'])
+        ];
+
         //----------------------------//
         // 2. Process Request
         //now trigger
@@ -62,19 +78,28 @@ cradle(function() {
 
         //----------------------------//
         // 3. Interpret Results
-        //if the event returned an error
-        if ($payload['response']->isError()) {
-            //collect all the errors
-            $errors[$data['name']] = $payload['response']->getValidation();
+        //if the event does hot have an error
+        if (!$payload['response']->isError()) {
+            $processed[] = $data['name'];
             continue;
         }
 
-        $processed[] = $data['name'];
+        $this->getResponse()->setError(true);
+        $errors = $payload['response']->getValidation();
+        foreach($errors as $key => $message) {
+            $logs[] = ['type' => 'error', 'message' => $message];
+        }
     }
 
-    if (!empty($errors)) {
-        $this->getResponse()->set('json', 'validation', $errors);
+    $schemas = $response->getResults('schemas');
+
+    if (!is_array($schemas)) {
+        $schemas = [];
     }
 
-    $this->getResponse()->setResults('schemas', $processed);
+    $schemas = array_merge($schemas, $processed);
+
+    $response
+        ->setResults('logs', 'cradlephp/cradle-api', '0.1.4', $logs)
+        ->setResults('schemas', $schemas);
 });
