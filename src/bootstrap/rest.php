@@ -71,6 +71,11 @@ return function($request, $response) {
 
                 //now trigger the event
                 $this->trigger($rest['rest_event'], $request, $response);
+
+                //remove client_id, client_secret
+                $response
+                    ->removeResults('client_id')
+                    ->removeResults('client_secret');
             }
         );
     }
