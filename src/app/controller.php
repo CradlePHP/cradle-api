@@ -65,10 +65,6 @@ $this->get('/admin/system/model/app/create', function ($request, $response) {
     if (!$response->hasPage('template_root')) {
         $response->setPage('template_root', __DIR__ . '/template');
     }
-
-    if (!$response->hasPage('partials_root')) {
-        $response->setPage('partials_root', __DIR__ . '/template');
-    }
 }, 10);
 
 /**
@@ -111,10 +107,6 @@ $this->get('/admin/system/model/app/update/:app_id', function ($request, $respon
 
     if (!$response->hasPage('template_root')) {
         $response->setPage('template_root', __DIR__ . '/template');
-    }
-
-    if (!$response->hasPage('partials_root')) {
-        $response->setPage('partials_root', __DIR__ . '/template');
     }
 }, 10);
 

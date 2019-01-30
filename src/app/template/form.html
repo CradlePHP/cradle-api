@@ -168,7 +168,7 @@
                 </div>
             {{/relations}}
 
-            {{#format 'field' schema.name this}}
+            {{#format 'field' schema.name item}}
                 {{#each formats}}
                     {{#when @key '!==' 'app_webhook'}}
                         {{> form_fieldset}}
