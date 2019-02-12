@@ -68,7 +68,7 @@ $this->get('/admin/system/model/app/create', function ($request, $response) {
 }, 10);
 
 /**
- * Render App Create Page
+ * Render App Update Page
  *
  * @param Request $request
  * @param Response $response
@@ -159,13 +159,14 @@ $this->get('/admin/system/model/app/refresh/:app_id', function ($request, $respo
         return;
     }
 
+    $global = $this->package('global');
     if ($response->isError()) {
         //add a flash
-        $this->package('global')->flash($response->getMessage(), 'error');
+        $global->flash($response->getMessage(), 'error');
     } else {
         //add a flash
-        $this->package('global')->flash('App was Refreshed', 'success');
+        $global->flash('App was Refreshed', 'success');
     }
 
-    $this->package('global')->redirect($redirect);
+    $global->redirect($redirect);
 });

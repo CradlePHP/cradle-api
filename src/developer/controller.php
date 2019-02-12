@@ -39,17 +39,19 @@ $this->get('/developer/docs/calls', function ($request, $response) {
         $redirect = $request->getStage('redirect_uri');
     }
 
+    $global = $this->package('global');
+
     //if there's an error
     if ($response->isError()) {
-        $this->package('global')->flash($response->getMessage(), 'error');
-        return $this->package('global')->redirect($redirect);
+        $global->flash($response->getMessage(), 'error');
+        return $global->redirect($redirect);
     }
 
     $data = $response->getResults();
     $data['schema'] = Schema::i('rest')->getAll();
 
     $class = 'page-developer-doc-calls page-developer';
-    $data['title'] = $this->package('global')->translate(
+    $data['title'] = $global->translate(
         '%s - API Documentation', $data['schema']['plural']
     );
 
@@ -108,10 +110,12 @@ $this->get('/developer/docs/calls/:rest_id', function ($request, $response) {
         $redirect = $request->getStage('redirect_uri');
     }
 
+    $global = $this->package('global');
+
     //if there's an error
     if ($response->isError()) {
-        $this->package('global')->flash($response->getMessage(), 'error');
-        return $this->package('global')->redirect($redirect);
+        $global->flash($response->getMessage(), 'error');
+        return $global->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -119,7 +123,7 @@ $this->get('/developer/docs/calls/:rest_id', function ($request, $response) {
 
     $class = 'page-developer-doc-call page-developer';
     $data['title'] = $response->getResults('rest_title');
-    $data['title'] = $this->package('global')->translate(
+    $data['title'] = $global->translate(
         '%s - API Documentation', $data['title']
     );
 
@@ -178,17 +182,19 @@ $this->get('/developer/docs/scopes', function ($request, $response) {
         $redirect = $request->getStage('redirect_uri');
     }
 
+    $global = $this->package('global');
+
     //if there's an error
     if ($response->isError()) {
-        $this->package('global')->flash($response->getMessage(), 'error');
-        return $this->package('global')->redirect($redirect);
+        $global->flash($response->getMessage(), 'error');
+        return $global->redirect($redirect);
     }
 
     $data = $response->getResults();
     $data['schema'] = Schema::i('scope')->getAll();
 
     $class = 'page-developer-doc-scopes page-developer';
-    $data['title'] = $this->package('global')->translate(
+    $data['title'] = $global->translate(
         '%s - API Documentation', $data['schema']['plural']
     );
 
@@ -247,10 +253,12 @@ $this->get('/developer/docs/scopes/:scope_slug', function ($request, $response) 
         $redirect = $request->getStage('redirect_uri');
     }
 
+    $global = $this->package('global');
+
     //if there's an error
     if ($response->isError()) {
-        $this->package('global')->flash($response->getMessage(), 'error');
-        return $this->package('global')->redirect($redirect);
+        $global->flash($response->getMessage(), 'error');
+        return $global->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -258,7 +266,7 @@ $this->get('/developer/docs/scopes/:scope_slug', function ($request, $response) 
 
     $class = 'page-developer-doc-scope page-developer';
     $data['title'] = $response->getResults('scope_name');
-    $data['title'] = $this->package('global')->translate(
+    $data['title'] = $global->translate(
         '%s - API Documentation', $data['title']
     );
 
@@ -317,17 +325,19 @@ $this->get('/developer/docs/webhooks', function ($request, $response) {
         $redirect = $request->getStage('redirect_uri');
     }
 
+    $global = $this->package('global');
+
     //if there's an error
     if ($response->isError()) {
-        $this->package('global')->flash($response->getMessage(), 'error');
-        return $this->package('global')->redirect($redirect);
+        $global->flash($response->getMessage(), 'error');
+        return $global->redirect($redirect);
     }
 
     $data = $response->getResults();
     $data['schema'] = Schema::i('webhook')->getAll();
 
     $class = 'page-developer-doc-webhooks page-developer';
-    $data['title'] = $this->package('global')->translate(
+    $data['title'] = $global->translate(
         '%s - API Documentation', $data['schema']['plural']
     );
 
@@ -386,10 +396,12 @@ $this->get('/developer/docs/webhooks/:webhook_id', function ($request, $response
         $redirect = $request->getStage('redirect_uri');
     }
 
+    $global = $this->package('global');
+
     //if there's an error
     if ($response->isError()) {
-        $this->package('global')->flash($response->getMessage(), 'error');
-        return $this->package('global')->redirect($redirect);
+        $global->flash($response->getMessage(), 'error');
+        return $global->redirect($redirect);
     }
 
     $data = $response->getResults();
@@ -397,7 +409,7 @@ $this->get('/developer/docs/webhooks/:webhook_id', function ($request, $response
 
     $class = 'page-developer-doc-webhook page-developer';
     $data['title'] = $response->getResults('webhook_title');
-    $data['title'] = $this->package('global')->translate(
+    $data['title'] = $global->translate(
         '%s - API Documentation', $data['title']
     );
 
