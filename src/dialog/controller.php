@@ -13,8 +13,9 @@
  * @param Response $response
  */
 $this->get('/dialog/request', function ($request, $response) {
+    $global = $this->package('global');
     //for logged in
-    $this->package('global')->requireLogin();
+    $global->requireLogin();
 
     if ($response->isError()) {
         $response->setFlash($response->getMessage(), 'error');
@@ -79,7 +80,7 @@ $this->get('/dialog/request', function ($request, $response) {
 
     //Render body
     $class = 'page-dialog-request page-dialog';
-    $title = $this->package('global')->translate('Request Access');
+    $title = $global->translate('Request Access');
 
     $template = __DIR__ . '/template';
     if (is_dir($response->getPage('template_root'))) {
@@ -123,8 +124,9 @@ $this->get('/dialog/request', function ($request, $response) {
  * @param Response $response
  */
 $this->post('/dialog/request', function ($request, $response) {
+    $global = $this->package('global');
     //for logged in
-    $this->package('global')->requireLogin();
+    $global->requireLogin();
 
     //csrf check
     $this->trigger('csrf-validate', $request, $response);
@@ -141,7 +143,7 @@ $this->post('/dialog/request', function ($request, $response) {
     if ($request->getStage('action') !== 'allow') {
         //redirect
         $url = $request->getStage('redirect_uri');
-        return $this->package('global')->redirect($url . '?error=deny');
+        return $global->redirect($url . '?error=deny');
     }
 
     //get the profile
@@ -190,7 +192,7 @@ $this->post('/dialog/request', function ($request, $response) {
     //redirect
     $url = $request->getStage('redirect_uri');
     $code = $response->getResults('session_token');
-    $this->package('global')->redirect($url . '?code=' . $code);
+    $global->redirect($url . '?code=' . $code);
 });
 
 /**
