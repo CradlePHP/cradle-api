@@ -14,7 +14,7 @@ use Cradle\Package\System\Schema;
  * @param Request $request
  * @param Response $response
  */
-$cradle->on('rest-access', function ($request, $response) {
+$this->on('rest-access', function ($request, $response) {
     //----------------------------//
     // 1. Get Data
     $data = [];
@@ -96,21 +96,39 @@ $cradle->on('rest-access', function ($request, $response) {
     }
 
     $results = [];
-
     $results['access_token'] = $response->getResults('session_token');
     $results['access_secret'] = $response->getResults('session_secret');
 
-    foreach ($current as $key => $value) {
-        if (strpos($key, 'profile_') === 0) {
-            $results[$key] = $value;
-            continue;
-        }
+    //return response format
+    $response->set('json', $results);
+});
+
+/**
+ * Resource request profile_id
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->on('rest-resource', function($request, $response) {
+    $resources = $this->method('system-model-search', [
+        'schema' => 'auth',
+        'filter' => [
+            'profile_id' => $request->getStage('profile_id')
+        ]
+    ]);
+
+    if (!isset($resources['rows'][0])) {
+        return $response->setError(true, 'No resource found');
     }
 
-    unset($results['profile_active'], $results['profile_updated']);
+    $resource = [
+        'id' => $resources['rows'][0]['auth_id'],
+        'email' => $resources['rows'][0]['auth_slug'],
+        'name' => $resources['rows'][0]['profile_name'],
+        'created' => $resources['rows'][0]['auth_created']
+    ];
 
-    //return response format
-    $response->setResults($results);
+    $response->set('json', $resource);
 });
 
 /**
@@ -119,7 +137,7 @@ $cradle->on('rest-access', function ($request, $response) {
  * @param Request $request
  * @param Request $response
  */
-$cradle->on('rest-source-app-detail', function ($request, $response) {
+$this->on('rest-source-app-detail', function ($request, $response) {
     if (!$request->hasStage('client_id')) {
         return $response->setError(true, 'Unauthorize Request');
     }
@@ -162,7 +180,7 @@ $cradle->on('rest-source-app-detail', function ($request, $response) {
  * @param Request $request
  * @param Request $response
  */
-$cradle->on('rest-source-session-detail', function ($request, $response) {
+$this->on('rest-source-session-detail', function ($request, $response) {
     if (!$request->hasStage('access_token')) {
         return $response->setError(true, 'Unauthorize Request');
     }
@@ -206,7 +224,7 @@ $cradle->on('rest-source-session-detail', function ($request, $response) {
  * @param Request $request
  * @param Response $response
  */
-$cradle->on('rest-route-search', function ($request, $response) {
+$this->on('rest-route-search', function ($request, $response) {
     $results = [];
     //first get all the public calls
     $rows = Schema::i('rest')

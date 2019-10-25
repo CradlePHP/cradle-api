@@ -20,3 +20,19 @@ $this->post('/rest/access', function ($request, $response) {
     //call the job
     $this->trigger('rest-access', $request, $response);
 });
+
+
+/**
+ * Process REST Resource
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/rest/resource', function ($request, $response) {
+    //set the profile id
+    $profile = $request->get('source', 'profile_id');
+    $request->setStage('profile_id', $profile);
+
+    //call the job
+    $this->trigger('rest-resource', $request, $response);
+});
