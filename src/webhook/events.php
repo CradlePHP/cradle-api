@@ -147,11 +147,8 @@ $cradle->on('webhook-call', function ($request, $response) {
             },
             //else (post or put)
             function () use (&$payload) {
-                $this->setPostFields(
-                    $payload,
-                    CurlHandler::ENCODE_JSON
-                );
+                $this->setPostFields($payload);
             }
         )
-        ->send();
+        ->getResponse();
 });
