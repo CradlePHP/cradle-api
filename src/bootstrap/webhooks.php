@@ -33,11 +33,17 @@ return function($request, $response) {
     $payload['request']->setStage('schema', 'webhook');
 
     //WARNING: Too many webhooks will slow down the system
-    $this->trigger(
-        'webhook-valid-search',
-        $payload['request'],
-        $payload['response']
-    );
+    try {
+        $this->trigger(
+            'webhook-valid-search',
+            $payload['request'],
+            $payload['response']
+        );
+    } catch (Throwable $e) {
+        //this can fail if the database has not been setup yet
+        //if this is the case, then let's silently exit
+        return;
+    }
 
     $webhooks = $payload['response']->getResults('rows');
 
