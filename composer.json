@@ -4,8 +4,8 @@
     "minimum-stability": "dev",
     "type": "cradle-package",
     "require": {
-        "cradlephp/cradle-profile": "~2.2.0",
-        "cradlephp/cradle-queue": "~2.2.0"
+        "cradlephp/cradle-profile": "~2.3.0",
+        "cradlephp/cradle-queue": "~2.3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "7.0.2",
